@@ -1,0 +1,213 @@
+/* --- Videos Styles --- */
+
+/* Unit Grid (Shared with Library, but can be specifically styled if needed) */
+.unit-grid {
+  display: grid;
+  gap: 1.25rem; /* Modernized gap */
+  margin-top: 2rem;
+  width: 100%;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.unit-btn {
+  padding: 1.25rem 1rem;
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg); /* Modern radius */
+  cursor: pointer;
+  transition: var(--transition-std);
+  font-size: 1rem;
+  text-align: center;
+  font-weight: 600;
+  color: var(--text-primary);
+  box-shadow: var(--shadow-sm);
+  line-height: 1.4;
+  white-space: normal;
+  min-height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.unit-btn:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--accent-color);
+  color: var(--accent-color-dark);
+  background: linear-gradient(135deg, var(--surface-color) 0%, var(--accent-color-light) 100%);
+}
+
+.unit-btn:focus-visible {
+  outline: 3px solid var(--accent-color);
+  outline-offset: 3px;
+  border-color: var(--accent-color);
+  z-index: 1;
+}
+
+/* Video List Grid */
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Slightly larger minmax for video cards */
+  gap: var(--gap-md); /* Using variable for consistency */
+  padding: 1.5rem 0;
+  width: 100%;
+}
+
+.video-card {
+  background: var(--gradient-surface-subtle);
+  border-radius: var(--radius-lg); /* Modern radius */
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  transition: var(--transition-std);
+  border: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+}
+
+.video-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--accent-color-medium);
+}
+.video-card:focus-within {
+  outline: 3px solid var(--accent-color);
+  outline-offset: 2px;
+  border-color: var(--accent-color);
+}
+
+.video-thumbnail {
+  width: 100%;
+  padding-top: 56.25%; /* 16:9 Aspect Ratio */
+  background-color: hsl(var(--neutral-hue), var(--neutral-saturation), 90%); /* Lighter placeholder */
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  cursor: pointer;
+  border-bottom: 1px solid var(--border-color);
+}
+.video-thumbnail:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: -1px; /* Outline inside the thumbnail */
+}
+
+.video-thumbnail::before {
+  content: '\25B6'; /* Unicode Play Symbol (▶) */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(1);
+  font-size: 2.8rem;
+  color: var(--primary-text-color);
+  background: hsla(var(--accent-hue), var(--accent-saturation), var(--accent-lightness), 0.7);
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 60px;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 0.9;
+  pointer-events: none;
+  backdrop-filter: blur(3px);
+  box-shadow: 0 2px 10px hsla(var(--accent-hue), var(--accent-saturation), 20%, 0.3);
+}
+
+.video-card:hover .video-thumbnail::before {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1.15);
+  background: hsla(var(--accent-hue), var(--accent-saturation), var(--accent-lightness), 0.85);
+}
+
+.video-thumbnail.playing::before {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.8);
+}
+
+.video-thumbnail iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0; /* Match card's top radius if iframe is directly child of card */
+}
+
+.video-info {
+  padding: 1.25rem 1.5rem; /* Increased padding */
+  flex-grow: 1;
+  background-color: var(--surface-color); /* Ensure info area has a solid background */
+  border-top: 1px solid var(--border-color); /* Separator if thumbnail has no border-bottom */
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg); /* Rounded bottom corners */
+}
+
+.video-info h3 {
+  margin-bottom: 0.5rem;
+  font-size: 1.15rem; /* Slightly larger title */
+  font-weight: 700;
+  line-height: 1.45;
+  color: var(--text-primary);
+}
+
+.video-card:hover .video-info h3 {
+  color: var(--accent-color-dark);
+}
+
+.video-info p {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 0;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+  .unit-grid {
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  }
+  .video-grid {
+    gap: var(--gap-sm);
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+}
+
+@media (max-width: 600px) { /* More general breakpoint for card stacking */
+  .video-grid {
+    grid-template-columns: 1fr; /* Stack videos */
+    gap: var(--gap-md);
+  }
+  .unit-grid {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 0.75rem;
+  }
+  .unit-btn {
+    padding: 1rem 0.8rem;
+    font-size: 0.9rem;
+    min-height: 60px;
+    border-radius: var(--radius-md);
+  }
+}
+
+@media (max-width: 480px) {
+  .unit-grid {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 0.75rem;
+  }
+  .unit-btn {
+    padding: 0.8rem 0.6rem;
+    font-size: 0.85rem;
+    min-height: 55px;
+    border-radius: var(--radius-md);
+  }
+  .video-info {
+    padding: 1rem 1.25rem;
+  }
+  .video-info h3 {
+    font-size: 1.05rem;
+  }
+  .video-info p {
+    font-size: 0.9rem;
+  }
+}

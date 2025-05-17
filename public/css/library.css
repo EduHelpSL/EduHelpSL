@@ -1,0 +1,1699 @@
+/* --- Library Styles --- */
+
+/* --- Library Main Search and Filters --- */
+.library-main-controls {
+  margin-bottom: 1.5rem; 
+  padding: 1rem 1.25rem; 
+  background: var(--gradient-surface-subtle);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.main-search-container {
+ display: flex; /* Use flexbox to align input and button (if search button is in this container) */
+ align-items: center; /* Vertically align items */
+  gap: 0.5rem; /* Add space between input and button */
+}
+.search-input {
+  flex-grow: 1;
+  padding: 0.6rem 0.9rem; /* Further reduced padding */
+  border: 1px solid var(--input-border);
+  border-radius: var(--radius-md);
+  font-size: 0.9rem; /* Further reduced font size */
+ align-self: center; /* Vertically align with button */
+  background: var(--input-bg);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-xs);
+}
+.search-input:focus {
+  border-color: var(--accent-color);
+  outline: none;
+  box-shadow: 0 0 0 2px var(--input-focus-ring), var(--shadow-sm); /* Smaller focus ring */
+}
+.search-input::placeholder {
+  color: var(--text-tertiary);
+  opacity: 1;
+}
+
+.library-main-controls .filter-row {
+  margin-top: 0.75rem; /* Space above the filter row */
+  display: flex;
+  gap: 1rem; /* Horizontal gap between filter containers */
+  align-items: center; /* Vertically align items */
+}
+
+.library-main-controls .filter-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex-grow: 1;
+  flex-basis: calc(33.33% - 0.66rem); /* Distribute space among 3 filters, accounting for gap */
+  min-width: 120px; /* Smallest size */
+}
+
+.library-main-controls .filter-label {
+  font-size: 0.8rem; 
+  color: var(--text-secondary);
+  font-weight: 500; 
+  margin-bottom: 0.1rem; /* Tiny space below label */
+}
+
+.library-main-controls .filter-select {
+  padding: 0.5rem 0.75rem; /* Further reduced padding */
+  border: 1px solid var(--input-border);
+  border-radius: var(--radius-sm); /* Smaller radius */
+  background-color: var(--input-bg);
+  color: var(--text-primary);
+  font-size: 0.85rem; /* Further reduced font size */
+  cursor: pointer;
+  width: 100%;
+  transition: var(--transition-std);
+  box-shadow: var(--shadow-xs);
+}
+.library-main-controls .filter-select:focus-visible {
+  border-color: var(--accent-color);
+  outline: none;
+  box-shadow: 0 0 0 2px var(--input-focus-ring), var(--shadow-sm);
+}
+
+.library-main-controls .search-button {
+  padding: 0.6rem 1.2rem; /* Adjusted padding to match input height */
+  font-size: 0.9rem; 
+  font-weight: 600;
+  color: var(--primary-text-color);
+  background: var(--gradient-primary);
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: var(--transition-std);
+  box-shadow: var(--shadow-sm);
+}
+
+.library-main-controls .search-button:hover {
+  background: var(--gradient-primary-hover);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.library-main-controls .search-button:focus-visible {
+  outline: 2px solid var(--accent-color-dark);
+  outline-offset: 1px;
+}
+
+.library-main-controls .search-status {
+  font-size: 0.8rem;
+  color: var(--text-tertiary);
+  min-height: 1.1em;
+  text-align: center;
+  margin-top: 0.75rem;
+}
+
+/* Navigation/Category Buttons (Grade, Resource Type) */
+.grade-grid,
+.resource-type-grid {
+  display: grid;
+  gap: 1rem; /* Reduced gap for a tighter look if controls are smaller */
+  margin-top: 1.5rem; /* Reduced margin-top if controls are smaller */
+  width: 100%;
+}
+
+.grade-grid {
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* Slightly smaller minmax */
+}
+
+.resource-type-grid {
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); /* Slightly smaller minmax */
+}
+
+.grade-btn,
+.resource-type-btn {
+  padding: 1.25rem; /* Slightly reduced padding */
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: var(--transition-std);
+  font-size: 1rem; /* Slightly reduced font size */
+  text-align: center;
+  font-weight: 600;
+  color: var(--text-primary);
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 130px; /* Reduced min-height */
+}
+
+.grade-btn:hover,
+.resource-type-btn:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--accent-color);
+  color: var(--accent-color-dark);
+  background: linear-gradient(135deg, var(--surface-color) 0%, var(--accent-color-light) 100%);
+}
+
+.grade-btn:focus-visible,
+.resource-type-btn:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+  z-index: 1;
+  border-color: var(--accent-color);
+}
+
+.resource-icon svg {
+  width: 40px; /* Slightly smaller icon */
+  height: 40px;
+  fill: var(--accent-color-medium);
+  margin-bottom: 0.75rem;
+  transition: transform 0.25s ease-out, fill 0.25s ease-out;
+}
+
+.resource-type-btn:hover .resource-icon svg {
+  transform: scale(1.1);
+  fill: var(--accent-color-dark);
+}
+
+.resource-type-btn h3 {
+  font-size: 1.05rem; /* Slightly smaller font */
+  color: var(--text-primary);
+  font-weight: 600;
+  margin: 0;
+  transition: color 0.2s ease-out;
+}
+
+.resource-type-btn:hover h3 {
+  color: var(--accent-color-dark);
+}
+
+/* Resource Type Options */
+.resource-type-option {
+  padding: 1.5rem;
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: var(--transition-std);
+  text-align: center;
+  color: var(--text-primary);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.resource-type-option:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--accent-color);
+  color: var(--accent-color-dark);
+  background: linear-gradient(135deg, var(--surface-color) 0%, var(--accent-color-light) 100%);
+}
+
+.resource-type-option .resource-icon svg {
+  width: 48px;
+  height: 48px;
+}
+
+/* Subject/Unit Grids & Buttons */
+.subject-grid {
+  display: grid;
+  gap: 0.8rem;
+  margin-top: 1.5rem;
+  width: 100%;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+}
+
+.subject-grid.subject-grid-vertical {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.7rem;
+}
+
+.subject-grid.subject-grid-vertical .subject-btn {
+  width: 100%;
+  text-align: left;
+  justify-content: flex-start;
+  padding: 0.8rem 1.1rem;
+}
+
+.subject-btn {
+  padding: 0.9rem 0.7rem;
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: var(--transition-std);
+  font-size: 0.9rem;
+  text-align: center;
+  font-weight: 500;
+  color: var(--text-primary);
+  box-shadow: var(--shadow-xs);
+  line-height: 1.3;
+  white-space: normal;
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.subject-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+  border-color: var(--accent-color-medium);
+  color: var(--accent-color-dark);
+  background: var(--accent-color-light);
+}
+
+.subject-btn:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 1px;
+  border-color: var(--accent-color);
+  z-index: 1;
+}
+
+.subject-category-header {
+  grid-column: 1 / -1;
+  margin-top: 1.5rem;
+  margin-bottom: 0.6rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid var(--accent-color);
+  color: var(--accent-color-dark);
+  font-size: 1.15rem;
+  font-weight: 700;
+  text-align: left;
+}
+.subject-category-header:first-child {
+  margin-top: 0;
+}
+
+/* --- Library List View Controls (Specific to list view) --- */
+.library-controls {
+  margin-bottom: 1.25rem; 
+  width: 100%;
+  padding: 0.9rem 1rem; 
+  background: var(--surface-color-alt);
+  display: flex; /* Enable flexbox for alignment */
+  flex-wrap: wrap; /* Allow wrapping */
+  gap: 0.75rem; /* Gap between elements */
+  border-radius: var(--radius-lg);
+  border: 1px solid transparent;
+  box-shadow: var(--shadow-sm);
+}
+
+.additional-filters-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem; 
+  margin-bottom: 0.4rem;
+  align-items: flex-end;
+}
+
+.search-container {
+  display: flex;
+  align-items: center; /* Align input and button vertically */
+  flex-grow: 1;
+  min-width: 180px; /* Ensure search container has a minimum width */
+}
+
+.library-controls .filter-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem; 
+  flex-shrink: 0;
+  flex-basis: 160px; /* Base width for filters */
+  min-width: 120px; /* Allow shrinking */
+}
+
+.library-controls .filter-label {
+  font-size: 0.75rem; 
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.library-controls .filter-select {
+  padding: 0.5rem 0.7rem; 
+  border: 1px solid var(--input-border);
+  border-radius: var(--radius-sm);
+  background-color: var(--input-bg);
+  color: var(--text-primary);
+  font-size: 0.8rem; 
+  cursor: pointer;
+  min-width: 120px; 
+  width: 100%; /* Make select take full width of its container */
+  transition: var(--transition-std);
+  box-shadow: var(--shadow-xs);
+}
+
+.library-controls .filter-select:focus-visible {
+  border-color: var(--accent-color);
+  outline: none;
+  box-shadow: 0 0 0 2px var(--input-focus-ring), var(--shadow-sm);
+}
+
+.library-controls .search-status {
+  font-size: 0.8rem;
+  color: var(--text-tertiary);
+  min-height: 1.1em;
+ text-align: center; /* Center the status */
+  width: 100%; /* Ensure status takes full width */
+  margin-top: 0.2rem;
+  flex-basis: 100%; /* Ensure status takes full width on its row */
+}
+
+/* Specific styles for the search button in the list view controls */
+.library-controls .search-button {
+  padding: 0.5rem 1rem; /* Match height of select */
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--primary-text-color);
+  background: var(--gradient-primary);
+  border-radius: var(--radius-sm);
+}
+
+/* Resource Items List */
+.resource-items {
+  display: grid;
+  gap: 0.8rem; /* Reduced gap */
+  margin-top: 1.5rem;
+  width: 100%;
+}
+
+.resource-item {
+  background: var(--gradient-surface-subtle);
+  padding: 1rem 1.25rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  transition: var(--transition-std);
+  gap: 0.8rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.resource-item:hover {
+  border-color: var(--accent-color-medium);
+  background: linear-gradient(135deg, var(--surface-color) 0%, var(--accent-color-light) 100%);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.resource-item h4 {
+  margin: 0;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 1rem;
+  flex-grow: 1;
+  word-break: break-word;
+  transition: color 0.2s ease-out;
+}
+.resource-item:hover h4 {
+    color: var(--accent-color-dark);
+}
+
+.resource-item h4 .highlight {
+  background-color: hsl(var(--accent-hue), var(--accent-saturation), 85%);
+  color: var(--accent-color-dark);
+  font-weight: 700;
+  padding: 0.1em 0.2em;
+  border-radius: var(--radius-sm);
+}
+
+.resource-item a {
+  color: var(--primary-text-color);
+  background: var(--accent-color);
+  text-decoration: none;
+  font-weight: 600;
+  padding: 0.5rem 1rem; /* Reduced padding */
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  transition: var(--transition-std);
+  font-size: 0.85rem; /* Reduced font size */
+  white-space: nowrap;
+  flex-shrink: 0;
+  box-shadow: var(--shadow-xs);
+}
+
+.resource-item a:hover {
+  background: var(--accent-color-dark);
+  color: var(--primary-text-color);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-1px);
+}
+.resource-item a:focus-visible {
+  outline: 2px solid var(--accent-color-dark);
+  outline-offset: 1px;
+  box-shadow: 0 0 0 2px var(--input-focus-ring);
+}
+
+.resource-item a[style*="cursor: not-allowed"] {
+  background: var(--surface-color-alt);
+  border-color: var(--border-color);
+  color: var(--text-secondary);
+  opacity: 0.7;
+  box-shadow: none;
+  transform: none;
+}
+.resource-item a[style*="cursor: not-allowed"]:hover {
+  background: var(--surface-color-alt);
+  color: var(--text-secondary);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+  .grade-grid,
+  .resource-type-grid {
+    gap: 1rem;
+  }
+  .subject-grid {
+    gap: 0.8rem;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  }
+  .library-main-controls {
+    padding: 0.8rem 1rem; 
+  }
+}
+
+@media (max-width: 768px) {
+  .grade-grid {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 0.75rem;
+  }
+  .library-main-controls .search-button {
+   /* Adjustments for potential wrapping on smaller screens */
+    width: 100%; /* Make button full width if it wraps */
+    margin-top: 0.6rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+  }
+ .library-main-controls .filter-row {
+ flex-wrap: wrap; /* Allow filters to wrap onto multiple lines */
+    gap: 0.75rem; /* Adjusted gap for wrapped items */
+  }
+  .search-input {
+    /* width: 100%; */ /* Already covered by flex-grow */
+    font-size: 0.85rem; 
+  }
+  .library-controls {
+    padding: 0.6rem 0.8rem; 
+  }
+  .resource-item {
+    padding: 0.8rem 1rem;
+  }
+
+  .library-controls .filter-container {
+    flex-basis: calc(50% - 0.375rem); /* Two filters per row with gap */
+    min-width: unset;
+
+    flex-grow: 1; /* Allow filters to grow */
+  }
+
+@media (max-width: 480px) {
+  .grade-grid {
+    gap: 0.6rem;
+  }
+  .grade-btn,
+  .resource-type-btn {
+    padding: 1rem 0.8rem;
+    font-size: 0.9rem;
+    min-height: 110px;
+    border-radius: var(--radius-md);
+  }
+  .resource-type-option {
+    padding: 1rem;
+    border-radius: var(--radius-md);
+  }
+  .resource-type-option .resource-icon svg {
+    width: 40px;
+    height: 40px;
+  }
+  .resource-type-grid {
+    grid-template-columns: 1fr 1fr; /* Force two columns on very small screens */
+    gap: 0.6rem;
+  }
+  .resource-icon svg {
+    width: 32px;
+    height: 32px;
+    margin-bottom: 0.5rem;
+  }
+  .resource-type-btn h3 {
+    font-size: 0.9rem;
+  }
+  .subject-grid {
+    grid-template-columns: 1fr 1fr; /* Force two columns */
+    gap: 0.6rem;
+  }
+  .subject-btn {
+    padding: 0.7rem 0.5rem;
+    font-size: 0.8rem;
+    min-height: 50px;
+    border-radius: var(--radius-sm);
+  }
+  .search-input {
+    font-size: 0.85rem !important; 
+  }
+  .library-main-controls {
+    padding: 0.6rem 0.8rem;
+    border-radius: var(--radius-md);
+  }
+  .library-main-controls .filter-label,
+  .library-main-controls .filter-select {
+    font-size: 0.75rem; 
+  }
+  .library-main-controls .search-status {
+ font-size: 0.7rem;
+  }
+
+  .library-main-controls .filter-container {
+    flex-basis: 100%; /* Stack filters on very small screens */
+  }
+
+  .resource-items {
+    gap: 0.6rem;
+  }
+  .resource-item {
+    padding: 0.8rem;
+    border-radius: var(--radius-md);
+  }
+  .resource-item a {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+  }
+}
+/* --- Library Styles --- */
+
+/* --- Library Main Search and Filters --- */
+.library-main-controls {
+  margin-bottom: 1.5rem; 
+  padding: 1rem 1.25rem; 
+  background: var(--gradient-surface-subtle);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.main-search-container {
+  display: flex; /* Use flexbox to align input and button (if search button is in this container) */
+}
+.search-input {
+  flex-grow: 1;
+  padding: 0.6rem 0.9rem; /* Further reduced padding */
+  border: 1px solid var(--input-border);
+  border-radius: var(--radius-md);
+  font-size: 0.9rem; /* Further reduced font size */
+ transition: var(--transition-std); /* Keep transition */
+ margin-right: 0.5rem; /* Add space between input and button */
+ align-self: center; /* Vertically align with button */
+  background: var(--input-bg);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-xs);
+}
+.search-input:focus {
+  border-color: var(--accent-color);
+  outline: none;
+  box-shadow: 0 0 0 2px var(--input-focus-ring), var(--shadow-sm); /* Smaller focus ring */
+}
+.search-input::placeholder {
+  color: var(--text-tertiary);
+  opacity: 1;
+}
+
+.library-main-controls .filter-row {
+  margin-top: 0.75rem; /* Space above the filter row */
+  display: flex;
+  gap: 1rem; /* Horizontal gap */
+  align-items: center; /* Vertically align items */
+}
+
+.library-main-controls .filter-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex-grow: 1;
+  flex-basis: 25%; /* Give each filter roughly equal width */
+  min-width: 120px; /* Smallest size */
+}
+
+.library-main-controls .filter-label {
+  font-size: 0.8rem; 
+  color: var(--text-secondary);
+  font-weight: 500; 
+  margin-bottom: 0.1rem; /* Tiny space below label */
+}
+
+.library-main-controls .filter-select {
+  padding: 0.5rem 0.75rem; /* Further reduced padding */
+  border: 1px solid var(--input-border);
+  border-radius: var(--radius-sm); /* Smaller radius */
+  background-color: var(--input-bg);
+  color: var(--text-primary);
+  font-size: 0.85rem; /* Further reduced font size */
+  cursor: pointer;
+  width: 100%;
+  transition: var(--transition-std);
+  box-shadow: var(--shadow-xs);
+}
+.library-main-controls .filter-select:focus-visible {
+  border-color: var(--accent-color);
+  outline: none;
+  box-shadow: 0 0 0 2px var(--input-focus-ring), var(--shadow-sm);
+}
+
+.library-main-controls .search-button {
+  padding: 0.6rem 1.2rem; /* Adjusted padding to match input height */
+  font-size: 0.9rem; 
+  font-weight: 600;
+  color: var(--primary-text-color);
+  background: var(--gradient-primary);
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+ align-self: center; /* Vertically align with input */
+  transition: var(--transition-std);
+  box-shadow: var(--shadow-sm);
+}
+
+.library-main-controls .search-button:hover {
+  background: var(--gradient-primary-hover);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.library-main-controls .search-button:focus-visible {
+  outline: 2px solid var(--accent-color-dark);
+  outline-offset: 1px;
+}
+
+.library-main-controls .search-status {
+  font-size: 0.8rem;
+  color: var(--text-tertiary);
+  min-height: 1.1em;
+  text-align: center;
+  margin-top: 0.75rem;
+}
+
+/* Navigation/Category Buttons (Grade, Resource Type) */
+.grade-grid,
+.resource-type-grid {
+  display: grid;
+  gap: 1rem; /* Reduced gap for a tighter look if controls are smaller */
+  margin-top: 1.5rem; /* Reduced margin-top if controls are smaller */
+  width: 100%;
+}
+
+.grade-grid {
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* Slightly smaller minmax */
+}
+
+.resource-type-grid {
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); /* Slightly smaller minmax */
+}
+
+.grade-btn,
+.resource-type-btn {
+  padding: 1.25rem; /* Slightly reduced padding */
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: var(--transition-std);
+  font-size: 1rem; /* Slightly reduced font size */
+  text-align: center;
+  font-weight: 600;
+  color: var(--text-primary);
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 130px; /* Reduced min-height */
+}
+
+.grade-btn:hover,
+.resource-type-btn:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--accent-color);
+  color: var(--accent-color-dark);
+  background: linear-gradient(135deg, var(--surface-color) 0%, var(--accent-color-light) 100%);
+}
+
+.grade-btn:focus-visible,
+.resource-type-btn:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+  z-index: 1;
+  border-color: var(--accent-color);
+}
+
+.resource-icon svg {
+  width: 40px; /* Slightly smaller icon */
+  height: 40px;
+  fill: var(--accent-color-medium);
+  margin-bottom: 0.75rem;
+  transition: transform 0.25s ease-out, fill 0.25s ease-out;
+}
+
+.resource-type-btn:hover .resource-icon svg {
+  transform: scale(1.1);
+  fill: var(--accent-color-dark);
+}
+
+.resource-type-btn h3 {
+  font-size: 1.05rem; /* Slightly smaller font */
+  color: var(--text-primary);
+  font-weight: 600;
+  margin: 0;
+  transition: color 0.2s ease-out;
+}
+
+.resource-type-btn:hover h3 {
+  color: var(--accent-color-dark);
+}
+
+/* Subject/Unit Grids & Buttons */
+.subject-grid {
+  display: grid;
+  gap: 0.8rem;
+  margin-top: 1.5rem;
+  width: 100%;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+}
+
+.subject-grid.subject-grid-vertical {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.7rem;
+}
+
+.subject-grid.subject-grid-vertical .subject-btn {
+  width: 100%;
+  text-align: left;
+  justify-content: flex-start;
+  padding: 0.8rem 1.1rem;
+}
+
+.subject-btn {
+  padding: 0.9rem 0.7rem;
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: var(--transition-std);
+  font-size: 0.9rem;
+  text-align: center;
+  font-weight: 500;
+  color: var(--text-primary);
+  box-shadow: var(--shadow-xs);
+  line-height: 1.3;
+  white-space: normal;
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.subject-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+  border-color: var(--accent-color-medium);
+  color: var(--accent-color-dark);
+  background: var(--accent-color-light);
+}
+
+.subject-btn:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 1px;
+  border-color: var(--accent-color);
+  z-index: 1;
+}
+
+.subject-category-header {
+  grid-column: 1 / -1;
+  margin-top: 1.5rem;
+  margin-bottom: 0.6rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid var(--accent-color);
+  color: var(--accent-color-dark);
+  font-size: 1.15rem;
+  font-weight: 700;
+  text-align: left;
+}
+.subject-category-header:first-child {
+  margin-top: 0;
+}
+
+/* --- Library List View Controls (Specific to list view) --- */
+.library-controls {
+  margin-bottom: 1.25rem; 
+  width: 100%;
+  padding: 0.9rem 1rem; 
+  background: var(--surface-color-alt);
+  display: flex; /* Enable flexbox for alignment */
+  flex-wrap: wrap; /* Allow wrapping */
+  gap: 0.75rem; /* Gap between elements */
+  border-radius: var(--radius-lg);
+  border: 1px solid transparent;
+  box-shadow: var(--shadow-sm);
+}
+
+.additional-filters-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem; 
+  margin-bottom: 0.4rem;
+  align-items: flex-end;
+}
+
+.search-container {
+  display: flex;
+  align-items: center; /* Align input and button vertically */
+  flex-grow: 1;
+  min-width: 180px; /* Ensure search container has a minimum width */
+}
+
+.library-controls .filter-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem; 
+  flex-shrink: 0;
+  flex-basis: 160px; /* Base width for filters */
+  min-width: 120px; /* Allow shrinking */
+}
+
+.library-controls .filter-label {
+  font-size: 0.75rem; 
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.library-controls .filter-select {
+  padding: 0.5rem 0.7rem; 
+  border: 1px solid var(--input-border);
+  border-radius: var(--radius-sm);
+  background-color: var(--input-bg);
+  color: var(--text-primary);
+  font-size: 0.8rem; 
+  cursor: pointer;
+  min-width: 120px; 
+  width: 100%; /* Make select take full width of its container */
+  transition: var(--transition-std);
+  box-shadow: var(--shadow-xs);
+}
+
+.library-controls .filter-select:focus-visible {
+  border-color: var(--accent-color);
+  outline: none;
+  box-shadow: 0 0 0 2px var(--input-focus-ring), var(--shadow-sm);
+}
+
+.library-controls .search-status {
+  font-size: 0.8rem;
+  color: var(--text-tertiary);
+  min-height: 1.1em;
+ text-align: center; /* Center the status */
+  width: 100%; /* Ensure status takes full width */
+  margin-top: 0.2rem;
+  flex-basis: 100%; /* Ensure status takes full width on its row */
+}
+
+/* Specific styles for the search button in the list view controls */
+.library-controls .search-button {
+  padding: 0.5rem 1rem; /* Match height of select */
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--primary-text-color);
+  background: var(--gradient-primary);
+  border-radius: var(--radius-sm);
+}
+
+/* Resource Items List */
+.resource-items {
+  display: grid;
+  gap: 0.8rem; /* Reduced gap */
+  margin-top: 1.5rem;
+  width: 100%;
+}
+
+.resource-item {
+  background: var(--gradient-surface-subtle);
+  padding: 1rem 1.25rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  transition: var(--transition-std);
+  gap: 0.8rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.resource-item:hover {
+  border-color: var(--accent-color-medium);
+  background: linear-gradient(135deg, var(--surface-color) 0%, var(--accent-color-light) 100%);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.resource-item h4 {
+  margin: 0;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 1rem;
+  flex-grow: 1;
+  word-break: break-word;
+  transition: color 0.2s ease-out;
+}
+.resource-item:hover h4 {
+    color: var(--accent-color-dark);
+}
+
+.resource-item h4 .highlight {
+  background-color: hsl(var(--accent-hue), var(--accent-saturation), 85%);
+  color: var(--accent-color-dark);
+  font-weight: 700;
+  padding: 0.1em 0.2em;
+  border-radius: var(--radius-sm);
+}
+
+.resource-item a {
+  color: var(--primary-text-color);
+  background: var(--accent-color);
+  text-decoration: none;
+  font-weight: 600;
+  padding: 0.5rem 1rem; /* Reduced padding */
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  transition: var(--transition-std);
+  font-size: 0.85rem; /* Reduced font size */
+  white-space: nowrap;
+  flex-shrink: 0;
+  box-shadow: var(--shadow-xs);
+}
+
+.resource-item a:hover {
+  background: var(--accent-color-dark);
+  color: var(--primary-text-color);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-1px);
+}
+.resource-item a:focus-visible {
+  outline: 2px solid var(--accent-color-dark);
+  outline-offset: 1px;
+  box-shadow: 0 0 0 2px var(--input-focus-ring);
+}
+
+.resource-item a[style*="cursor: not-allowed"] {
+  background: var(--surface-color-alt);
+  border-color: var(--border-color);
+  color: var(--text-secondary);
+  opacity: 0.7;
+  box-shadow: none;
+  transform: none;
+}
+.resource-item a[style*="cursor: not-allowed"]:hover {
+  background: var(--surface-color-alt);
+  color: var(--text-secondary);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+  .grade-grid,
+  .resource-type-grid {
+    gap: 1rem;
+  }
+  .subject-grid {
+    gap: 0.8rem;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  }
+  .library-main-controls {
+    padding: 0.8rem 1rem; 
+  }
+}
+
+@media (max-width: 768px) {
+  .grade-grid {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 0.75rem;
+  }
+  .library-main-controls .search-button {
+   /* Adjustments for potential wrapping on smaller screens */
+    width: 100%; /* Make button full width if it wraps */
+    margin-top: 0.6rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+  }
+ .library-main-controls .filter-row {
+ flex-wrap: wrap; /* Allow filters to wrap onto multiple lines */
+    gap: 0.75rem; /* Adjusted gap for wrapped items */
+  }
+  .search-input {
+    /* width: 100%; */ /* Already covered by flex-grow */
+    font-size: 0.85rem; 
+  }
+  .library-controls {
+    padding: 0.6rem 0.8rem; 
+  }
+  .resource-item {
+    padding: 0.8rem 1rem;
+  }
+
+  .library-controls .filter-container {
+    flex-basis: calc(50% - 0.375rem); /* Two filters per row with gap */
+    min-width: unset;
+
+    flex-grow: 1; /* Allow filters to grow */
+  }
+
+@media (max-width: 480px) {
+  .grade-grid {
+    gap: 0.6rem;
+  }
+  .grade-btn,
+  .resource-type-btn {
+    padding: 1rem 0.8rem;
+    font-size: 0.9rem;
+    min-height: 110px;
+    border-radius: var(--radius-md);
+  }
+  .resource-type-grid {
+    grid-template-columns: 1fr 1fr; /* Force two columns on very small screens */
+    gap: 0.6rem;
+  }
+  .resource-icon svg {
+    width: 32px;
+    height: 32px;
+    margin-bottom: 0.5rem;
+  }
+  .resource-type-btn h3 {
+    font-size: 0.9rem;
+  }
+  .subject-grid {
+    grid-template-columns: 1fr 1fr; /* Force two columns */
+    gap: 0.6rem;
+  }
+  .subject-btn {
+    padding: 0.7rem 0.5rem;
+    font-size: 0.8rem;
+    min-height: 50px;
+    border-radius: var(--radius-sm);
+  }
+  .search-input {
+    font-size: 0.85rem !important; 
+  }
+  .library-main-controls {
+    padding: 0.6rem 0.8rem;
+    border-radius: var(--radius-md);
+  }
+  .library-main-controls .filter-label,
+  .library-main-controls .filter-select {
+    font-size: 0.75rem; 
+  }
+  .library-main-controls .search-status {
+ font-size: 0.7rem;
+  }
+
+  .library-main-controls .filter-container {
+    flex-basis: 100%; /* Stack filters on very small screens */
+  }
+
+  .resource-items {
+    gap: 0.6rem;
+  }
+  .resource-item {
+    padding: 0.8rem;
+    border-radius: var(--radius-md);
+  }
+  .resource-item a {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+  }
+}
+}
+}
+/* --- Library Styles --- */
+
+/* --- Library Main Search and Filters --- */
+.library-main-controls {
+  margin-bottom: 1.5rem; 
+  padding: 1rem 1.25rem; 
+  background: var(--gradient-surface-subtle);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.main-search-container {
+  display: flex; /* Use flexbox to align input and button (if search button is in this container) */
+}
+.search-input {
+  flex-grow: 1;
+  padding: 0.6rem 0.9rem; /* Further reduced padding */
+  border: 1px solid var(--input-border);
+  border-radius: var(--radius-md);
+  font-size: 0.9rem; /* Further reduced font size */
+ transition: var(--transition-std); /* Keep transition */
+ margin-right: 0.5rem; /* Add space between input and button */
+ align-self: center; /* Vertically align with button */
+  background: var(--input-bg);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-xs);
+}
+.search-input:focus {
+  border-color: var(--accent-color);
+  outline: none;
+  box-shadow: 0 0 0 2px var(--input-focus-ring), var(--shadow-sm); /* Smaller focus ring */
+}
+.search-input::placeholder {
+  color: var(--text-tertiary);
+  opacity: 1;
+}
+
+.library-main-controls .filter-row {
+  margin-top: 0.75rem; /* Space above the filter row */
+  display: flex;
+  gap: 1rem; /* Horizontal gap */
+  align-items: center; /* Vertically align items */
+}
+
+.library-main-controls .filter-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex-grow: 1;
+  flex-basis: 25%; /* Give each filter roughly equal width */
+  min-width: 120px; /* Smallest size */
+}
+
+.library-main-controls .filter-label {
+  font-size: 0.8rem; 
+  color: var(--text-secondary);
+  font-weight: 500; 
+  margin-bottom: 0.1rem; /* Tiny space below label */
+}
+
+.library-main-controls .filter-select {
+  padding: 0.5rem 0.75rem; /* Further reduced padding */
+  border: 1px solid var(--input-border);
+  border-radius: var(--radius-sm); /* Smaller radius */
+  background-color: var(--input-bg);
+  color: var(--text-primary);
+  font-size: 0.85rem; /* Further reduced font size */
+  cursor: pointer;
+  width: 100%;
+  transition: var(--transition-std);
+  box-shadow: var(--shadow-xs);
+}
+.library-main-controls .filter-select:focus-visible {
+  border-color: var(--accent-color);
+  outline: none;
+  box-shadow: 0 0 0 2px var(--input-focus-ring), var(--shadow-sm);
+}
+
+.library-main-controls .search-button {
+  padding: 0.6rem 1.2rem; /* Adjusted padding to match input height */
+  font-size: 0.9rem; 
+  font-weight: 600;
+  color: var(--primary-text-color);
+  background: var(--gradient-primary);
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+ align-self: center; /* Vertically align with input */
+  transition: var(--transition-std);
+  box-shadow: var(--shadow-sm);
+}
+
+.library-main-controls .search-button:hover {
+  background: var(--gradient-primary-hover);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.library-main-controls .search-button:focus-visible {
+  outline: 2px solid var(--accent-color-dark);
+  outline-offset: 1px;
+}
+
+.library-main-controls .search-status {
+  font-size: 0.8rem;
+  color: var(--text-tertiary);
+  min-height: 1.1em;
+  text-align: center;
+  margin-top: 0.75rem;
+}
+
+/* Navigation/Category Buttons (Grade, Resource Type) */
+.grade-grid,
+.resource-type-grid {
+  display: grid;
+  gap: 1rem; /* Reduced gap for a tighter look if controls are smaller */
+  margin-top: 1.5rem; /* Reduced margin-top if controls are smaller */
+  width: 100%;
+}
+
+.grade-grid {
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* Slightly smaller minmax */
+}
+
+.resource-type-grid {
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); /* Slightly smaller minmax */
+}
+
+.grade-btn,
+.resource-type-btn {
+  padding: 1.25rem; /* Slightly reduced padding */
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: var(--transition-std);
+  font-size: 1rem; /* Slightly reduced font size */
+  text-align: center;
+  font-weight: 600;
+  color: var(--text-primary);
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 130px; /* Reduced min-height */
+}
+
+.grade-btn:hover,
+.resource-type-btn:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--accent-color);
+  color: var(--accent-color-dark);
+  background: linear-gradient(135deg, var(--surface-color) 0%, var(--accent-color-light) 100%);
+}
+
+.grade-btn:focus-visible,
+.resource-type-btn:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+  z-index: 1;
+  border-color: var(--accent-color);
+}
+
+.resource-icon svg {
+  width: 40px; /* Slightly smaller icon */
+  height: 40px;
+  fill: var(--accent-color-medium);
+  margin-bottom: 0.75rem;
+  transition: transform 0.25s ease-out, fill 0.25s ease-out;
+}
+
+.resource-type-btn:hover .resource-icon svg {
+  transform: scale(1.1);
+  fill: var(--accent-color-dark);
+}
+
+.resource-type-btn h3 {
+  font-size: 1.05rem; /* Slightly smaller font */
+  color: var(--text-primary);
+  font-weight: 600;
+  margin: 0;
+  transition: color 0.2s ease-out;
+}
+
+.resource-type-btn:hover h3 {
+  color: var(--accent-color-dark);
+}
+
+/* Subject/Unit Grids & Buttons */
+.subject-grid {
+  display: grid;
+  gap: 0.8rem;
+  margin-top: 1.5rem;
+  width: 100%;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+}
+
+.subject-grid.subject-grid-vertical {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.7rem;
+}
+
+.subject-grid.subject-grid-vertical .subject-btn {
+  width: 100%;
+  text-align: left;
+  justify-content: flex-start;
+  padding: 0.8rem 1.1rem;
+}
+
+.subject-btn {
+  padding: 0.9rem 0.7rem;
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: var(--transition-std);
+  font-size: 0.9rem;
+  text-align: center;
+  font-weight: 500;
+  color: var(--text-primary);
+  box-shadow: var(--shadow-xs);
+  line-height: 1.3;
+  white-space: normal;
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.subject-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+  border-color: var(--accent-color-medium);
+  color: var(--accent-color-dark);
+  background: var(--accent-color-light);
+}
+
+.subject-btn:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 1px;
+  border-color: var(--accent-color);
+  z-index: 1;
+}
+
+.subject-category-header {
+  grid-column: 1 / -1;
+  margin-top: 1.5rem;
+  margin-bottom: 0.6rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid var(--accent-color);
+  color: var(--accent-color-dark);
+  font-size: 1.15rem;
+  font-weight: 700;
+  text-align: left;
+}
+.subject-category-header:first-child {
+  margin-top: 0;
+}
+
+/* --- Library List View Controls (Specific to list view) --- */
+.library-controls {
+  margin-bottom: 1.25rem; 
+  width: 100%;
+  padding: 0.9rem 1rem; 
+  background: var(--surface-color-alt);
+  display: flex; /* Enable flexbox for alignment */
+  flex-wrap: wrap; /* Allow wrapping */
+  gap: 0.75rem; /* Gap between elements */
+  border-radius: var(--radius-lg);
+  border: 1px solid transparent;
+  box-shadow: var(--shadow-sm);
+}
+
+.additional-filters-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem; 
+  margin-bottom: 0.4rem;
+  align-items: flex-end;
+}
+
+.search-container {
+  display: flex;
+  align-items: center; /* Align input and button vertically */
+  flex-grow: 1;
+  min-width: 180px; /* Ensure search container has a minimum width */
+}
+
+.library-controls .filter-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem; 
+  flex-shrink: 0;
+  flex-basis: 160px; /* Base width for filters */
+  min-width: 120px; /* Allow shrinking */
+}
+
+.library-controls .filter-label {
+  font-size: 0.75rem; 
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.library-controls .filter-select {
+  padding: 0.5rem 0.7rem; 
+  border: 1px solid var(--input-border);
+  border-radius: var(--radius-sm);
+  background-color: var(--input-bg);
+  color: var(--text-primary);
+  font-size: 0.8rem; 
+  cursor: pointer;
+  min-width: 120px; 
+  width: 100%; /* Make select take full width of its container */
+  transition: var(--transition-std);
+  box-shadow: var(--shadow-xs);
+}
+
+.library-controls .filter-select:focus-visible {
+  border-color: var(--accent-color);
+  outline: none;
+  box-shadow: 0 0 0 2px var(--input-focus-ring), var(--shadow-sm);
+}
+
+.library-controls .search-status {
+  font-size: 0.8rem;
+  color: var(--text-tertiary);
+  min-height: 1.1em;
+ text-align: center; /* Center the status */
+  width: 100%; /* Ensure status takes full width */
+  margin-top: 0.2rem;
+  flex-basis: 100%; /* Ensure status takes full width on its row */
+}
+
+/* Specific styles for the search button in the list view controls */
+.library-controls .search-button {
+  padding: 0.5rem 1rem; /* Match height of select */
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--primary-text-color);
+  background: var(--gradient-primary);
+  border-radius: var(--radius-sm);
+}
+
+/* Resource Items List */
+.resource-items {
+  display: grid;
+  gap: 0.8rem; /* Reduced gap */
+  margin-top: 1.5rem;
+  width: 100%;
+}
+
+.resource-item {
+  background: var(--gradient-surface-subtle);
+  padding: 1rem 1.25rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  transition: var(--transition-std);
+  gap: 0.8rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.resource-item:hover {
+  border-color: var(--accent-color-medium);
+  background: linear-gradient(135deg, var(--surface-color) 0%, var(--accent-color-light) 100%);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.resource-item h4 {
+  margin: 0;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 1rem;
+  flex-grow: 1;
+  word-break: break-word;
+  transition: color 0.2s ease-out;
+}
+.resource-item:hover h4 {
+    color: var(--accent-color-dark);
+}
+
+.resource-item h4 .highlight {
+  background-color: hsl(var(--accent-hue), var(--accent-saturation), 85%);
+  color: var(--accent-color-dark);
+  font-weight: 700;
+  padding: 0.1em 0.2em;
+  border-radius: var(--radius-sm);
+}
+
+.resource-item a {
+  color: var(--primary-text-color);
+  background: var(--accent-color);
+  text-decoration: none;
+  font-weight: 600;
+  padding: 0.5rem 1rem; /* Reduced padding */
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  transition: var(--transition-std);
+  font-size: 0.85rem; /* Reduced font size */
+  white-space: nowrap;
+  flex-shrink: 0;
+  box-shadow: var(--shadow-xs);
+}
+
+.resource-item a:hover {
+  background: var(--accent-color-dark);
+  color: var(--primary-text-color);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-1px);
+}
+.resource-item a:focus-visible {
+  outline: 2px solid var(--accent-color-dark);
+  outline-offset: 1px;
+  box-shadow: 0 0 0 2px var(--input-focus-ring);
+}
+
+.resource-item a[style*="cursor: not-allowed"] {
+  background: var(--surface-color-alt);
+  border-color: var(--border-color);
+  color: var(--text-secondary);
+  opacity: 0.7;
+  box-shadow: none;
+  transform: none;
+}
+.resource-item a[style*="cursor: not-allowed"]:hover {
+  background: var(--surface-color-alt);
+  color: var(--text-secondary);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+  .grade-grid,
+  .resource-type-grid {
+    gap: 1rem;
+  }
+  .subject-grid {
+    gap: 0.8rem;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  }
+  .library-main-controls {
+    padding: 0.8rem 1rem; 
+  }
+}
+
+@media (max-width: 768px) {
+  .grade-grid {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 0.75rem;
+  }
+  .library-main-controls .search-button {
+   /* Adjustments for potential wrapping on smaller screens */
+    width: 100%; /* Make button full width if it wraps */
+    margin-top: 0.6rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+  }
+ .library-main-controls .filter-row {
+ flex-wrap: wrap; /* Allow filters to wrap onto multiple lines */
+    gap: 0.75rem; /* Adjusted gap for wrapped items */
+  }
+  .search-input {
+    /* width: 100%; */ /* Already covered by flex-grow */
+    font-size: 0.85rem; 
+  }
+  .library-controls {
+    padding: 0.6rem 0.8rem; 
+  }
+  .resource-item {
+    padding: 0.8rem 1rem;
+  }
+
+  .library-controls .filter-container {
+ flex-basis: calc(50% - 0.5rem); /* Two filters per row on medium screens */
+    min-width: unset;
+
+    flex-grow: 1; /* Allow filters to grow */
+  }
+
+@media (max-width: 480px) {
+  .grade-grid {
+    gap: 0.6rem;
+  }
+  .grade-btn,
+  .resource-type-btn {
+    padding: 1rem 0.8rem;
+    font-size: 0.9rem;
+    min-height: 110px;
+    border-radius: var(--radius-md);
+  }
+  .resource-type-grid {
+    grid-template-columns: 1fr 1fr; /* Force two columns on very small screens */
+    gap: 0.6rem;
+  }
+  .resource-icon svg {
+    width: 32px;
+    height: 32px;
+    margin-bottom: 0.5rem;
+  }
+  .resource-type-btn h3 {
+    font-size: 0.9rem;
+  }
+  .subject-grid {
+    grid-template-columns: 1fr 1fr; /* Force two columns */
+    gap: 0.6rem;
+  }
+  .subject-btn {
+    padding: 0.7rem 0.5rem;
+    font-size: 0.8rem;
+    min-height: 50px;
+    border-radius: var(--radius-sm);
+  }
+  .search-input {
+    font-size: 0.85rem !important; 
+  }
+  .library-main-controls {
+    padding: 0.6rem 0.8rem;
+    border-radius: var(--radius-md);
+  }
+  .library-main-controls .filter-label,
+  .library-main-controls .filter-select {
+    font-size: 0.75rem; 
+  }
+  .library-main-controls .search-status {
+ font-size: 0.7rem;
+  }
+
+  .library-main-controls .filter-container {
+    flex-basis: 100%; /* Stack filters on very small screens */
+  }
+
+  .resource-items {
+    gap: 0.6rem;
+  }
+  .resource-item {
+    padding: 0.8rem;
+    border-radius: var(--radius-md);
+  }
+  .resource-item a {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+  }
+}
+}

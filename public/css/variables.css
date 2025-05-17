@@ -1,0 +1,142 @@
+:root {
+  /* --- Primary Accent Color (Blue) --- */
+  --accent-hue: 217;
+  --accent-saturation: 60%; 
+  --accent-lightness: 70%; 
+  --accent-color: hsl(var(--accent-hue), var(--accent-saturation), var(--accent-lightness));
+  --accent-color-dark: hsl(var(--accent-hue), var(--accent-saturation), 60%); 
+  --accent-color-medium: hsl(var(--accent-hue), var(--accent-saturation), 65%); 
+  --accent-color-light: hsl(var(--accent-hue), var(--accent-saturation), 96%); 
+  --accent-color-hover: hsl(var(--accent-hue), var(--accent-saturation), 65%); 
+
+  /* --- Secondary Accent Color (Green) --- */
+  --secondary-accent-hue: 158;
+  --secondary-accent-saturation: 50%; 
+  --secondary-accent-lightness: 55%; 
+  --secondary-accent-color: hsl(var(--secondary-accent-hue), var(--secondary-accent-saturation), var(--secondary-accent-lightness));
+  --secondary-accent-color-dark: hsl(var(--secondary-accent-hue), var(--secondary-accent-saturation), 45%); 
+  --secondary-accent-color-light: hsl(var(--secondary-accent-hue), var(--secondary-accent-saturation), 95%); 
+
+  /* --- Base and Neutral Colors --- */
+  --surface-color: #FFFFFF; 
+  --neutral-hue: 210; 
+  --neutral-saturation: 5%; 
+  --bg-color: hsl(var(--neutral-hue), var(--neutral-saturation), 98%); 
+  --surface-color-alt: hsl(var(--neutral-hue), var(--neutral-saturation), 97%); 
+  --border-color: hsl(var(--neutral-hue), var(--neutral-saturation), 92%); 
+  --text-primary: hsl(var(--neutral-hue), 10%, 15%);
+  --text-secondary: hsl(var(--neutral-hue), 8%, 35%);
+  --text-tertiary: hsl(var(--neutral-hue), 7%, 50%);
+
+  /* --- Background Variables --- */
+  --background: var(--bg-color);
+  --bg-grad-start: var(--surface-color);
+  --bg-grad-end: var(--surface-color-alt);
+
+  /* --- Modern Gradient Definitions --- */
+  --gradient-primary: linear-gradient(135deg, var(--accent-color) 0%, hsl(var(--accent-hue), var(--accent-saturation), 60%) 100%);
+  --gradient-primary-hover: linear-gradient(135deg, hsl(var(--accent-hue), var(--accent-saturation), 60%) 0%, var(--accent-color) 100%);
+  --gradient-surface-subtle: linear-gradient(180deg, var(--surface-color) 0%, var(--surface-color-alt) 100%);
+  --gradient-accent-soft-transparent: linear-gradient(135deg, hsla(var(--accent-hue), var(--accent-saturation), var(--accent-lightness), 0.05) 0%, hsla(var(--accent-hue), var(--accent-saturation), 60%, 0.02) 100%); 
+  --gradient-secondary-accent: linear-gradient(135deg, var(--secondary-accent-color) 0%, hsl(var(--secondary-accent-hue), var(--secondary-accent-saturation), 45%) 100%); 
+
+  /* Added Gradients for more color */
+  --gradient-hero: linear-gradient(135deg, var(--accent-color-dark) 0%, var(--secondary-accent-color) 100%); 
+  --gradient-teal-green: linear-gradient(135deg, var(--secondary-accent-color-light) 0%, var(--secondary-accent-color) 100%);
+  --gradient-purple-pink: linear-gradient(135deg, #c39be0 0%, #ffb3da); 
+  --gradient-orange-yellow: linear-gradient(135deg, #ffb74d 0%, #fff176); 
+  --gradient-green-lime: linear-gradient(135deg, #81c784 0%, #dcedc8); 
+  --gradient-deep-sky: linear-gradient(135deg, #64b5f6 0%, #90caf9); 
+  --gradient-warm-flame: linear-gradient(45deg, #ffccbc 0%, #ffe0b2 99%, #ffe0b2 100%); 
+  --gradient-night-fade: linear-gradient(to top, #d1c4e9 0%, #fce4ec 100%); 
+  --gradient-spring-warmth: linear-gradient(to top, #ffe0b2 0%, #fff9c4 100%); 
+  --gradient-premium-dark: linear-gradient(to right, #757575 0%, #bdbdbd 100%); 
+  --gradient-crystal-clear: linear-gradient(to top, #80deea 0%, #b2ebf2 100%); 
+
+
+  /* --- Semantic Colors --- */
+  --primary-color: var(--accent-color);
+  --primary-text-color: hsl(var(--neutral-hue), var(--neutral-saturation), 15%);
+  --secondary-color: hsl(var(--neutral-hue), var(--neutral-saturation), 85%); 
+  --secondary-text-color: var(--text-primary);
+  
+  --success-color: var(--secondary-accent-color); 
+  --warning-color: hsl(40, 70%, 65%); 
+  --error-color: hsl(0, 60%, 70%); 
+  --info-color: hsl(190, 60%, 65%); 
+
+  /* --- UI Elements --- */
+  --link-color: var(--accent-color); 
+  --link-hover-color: var(--accent-color-dark);
+  
+  --button-primary-bg: var(--gradient-primary);
+  --button-primary-hover-bg: var(--gradient-primary-hover);
+  --button-text-color: #FFFFFF;
+  
+  --button-secondary-bg: var(--surface-color);
+  --button-secondary-hover-bg: hsl(var(--neutral-hue), var(--neutral-saturation), 95%); 
+  --button-secondary-border: var(--border-color);
+  --button-secondary-text-color: hsl(var(--accent-hue), var(--accent-saturation), 40%);
+
+  --input-bg: var(--surface-color);
+  --input-border: hsl(var(--neutral-hue), var(--neutral-saturation), 90%); 
+  --input-focus-ring: hsla(var(--accent-hue), var(--accent-saturation), var(--accent-lightness), 0.25); 
+  
+  --header-bg: hsla(var(--neutral-hue), var(--neutral-saturation), 99%, 0.8); 
+  --header-shadow: 0 1px 5px hsla(var(--neutral-hue), var(--neutral-saturation), 10%, 0.05); 
+  --footer-bg: hsl(var(--neutral-hue), var(--neutral-saturation), 96%); 
+  --footer-text-color: hsl(var(--neutral-hue), var(--neutral-saturation), 60%); 
+  --footer-link-color: hsl(var(--neutral-hue), var(--neutral-saturation), 50%); 
+
+  /* --- Chat Specific --- */
+  --message-bot-bg: var(--gradient-surface-subtle);
+  --message-bot-border: var(--border-color);
+  --message-user-bg: var(--gradient-primary);
+  --message-user-text: #FFFFFF;
+  --attachment-bg: hsl(var(--accent-hue), 15%, 96%); 
+  --attachment-border: hsl(var(--accent-hue), 15%, 92%); 
+  --attachment-text: var(--text-secondary);
+  --attachment-icon-color: var(--accent-color-medium);
+
+  /* --- General Styles --- */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 18px;
+  --radius: var(--radius-md); 
+  
+  --shadow-xs: 0 1px 2px 0 hsla(var(--neutral-hue), 10%, 15%, 0.02); 
+  --shadow-sm: 0 2px 4px -1px hsla(var(--neutral-hue), 10%, 15%, 0.03), 0 1px 2px -1px hsla(var(--neutral-hue), 10%, 15%, 0.02);
+  --shadow-md: 0 4px 8px -2px hsla(var(--neutral-hue), 10%, 15%, 0.04), 0 2px 4px -2px hsla(var(--neutral-hue), 10%, 15%, 0.03);
+  --shadow-lg: 0 10px 15px -3px hsla(var(--neutral-hue), 10%, 15%, 0.05), 0 4px 6px -4px hsla(var(--neutral-hue), 10%, 15%, 0.04);
+  --shadow-xl: 0 20px 25px -5px hsla(var(--neutral-hue), 10%, 15%, 0.08), 0 8px 10px -6px hsla(var(--neutral-hue), 10%, 15%, 0.06);
+  --shadow: var(--shadow-md);
+
+  --transition-fast: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-std: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition: var(--transition-std);
+
+
+  --gap-xs: 0.5rem;    /* 8px */
+  --gap-sm: 0.75rem;   /* 12px */
+  --gap-md: 1.25rem;   /* 20px */
+  --gap-lg: 2rem;      /* 32px */
+  --gap-xl: 3rem;      /* 48px */
+  --gap: var(--gap-md);
+
+  --header-height: 70px;
+  --footer-height: auto; 
+
+  /* --- Typography --- */
+  --font-primary: "Noto Sans Tamil", 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+  --font-secondary: "Noto Sans Tamil", 'Poppins', sans-serif; 
+
+  --text-body: 1rem; 
+  --text-sm: 0.875rem; 
+  --text-lg: 1.125rem; 
+  --text-xl: 1.25rem; 
+  --text-2xl: 1.5rem; 
+  --text-3xl: 1.875rem; 
+  --text-4xl: 2.25rem; 
+  --text-5xl: 3rem; 
+}

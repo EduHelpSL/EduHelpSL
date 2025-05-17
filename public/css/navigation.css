@@ -1,0 +1,178 @@
+/* --- Navigation Styles --- */
+/* Contains styles for the navigation buttons, language switcher, and brand (logo/title) */
+
+/* Header (contains logo and navigation) */
+header {
+ display: flex;
+ justify-content: space-between; /* Space between logo and nav */
+ align-items: center; /* Align items vertically */
+ padding: 1rem 2rem;
+ background: var(--surface-darker);
+ position: fixed; /* Fixed header at the top */
+ width: 100%;
+ top: 0;
+ left: 0;
+ z-index: 100; /* Ensure header is above other content */
+ box-shadow: var(--shadow-md);
+ transition: background 0.3s ease; /* Smooth transition for background */
+}
+
+
+/* Navigation */
+.nav {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.nav-btn {
+  padding: 0.6rem 1.2rem;
+  background: rgba(255, 255, 255, 0.1); /* Semi-transparent background */
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius);
+  color: var(--primary-text);
+  cursor: pointer;
+  transition: var(--transition);
+  font-weight: 600;
+  font-size: 0.95rem;
+  white-space: nowrap;
+  position: relative;
+  line-height: normal;
+  vertical-align: middle;
+  min-height: 2.5em; /* Prevent shrinking before text loads */
+}
+
+.nav-btn.active {
+ background: var(--accent-color); /* Override background with the blue variable */
+ color: var(--white); /* Override color with white variable */
+ font-weight: 700;
+ box-shadow: var(--shadow-sm);
+ border-color: transparent; /* No border when active */
+}
+
+.nav-btn:hover:not(.active) {
+  background: rgba(255, 255, 255, 0.2); /* More transparent on hover */
+  transform: translateY(-1px); /* Subtle lift effect */
+}
+
+/* Language Switcher */
+.lang-switcher {
+  display: flex;
+  gap: 0.5rem;
+ margin-left: 2rem; /* Space from navigation */
+ flex-shrink: 0; /* Prevent shrinking */
+}
+
+/* Brand (Logo/Title) */
+.brand {
+ display: flex;
+ align-items: center;
+ color: var(--primary-text);
+ font-size: 1.5rem;
+ font-weight: 700;
+}
+
+.lang-btn {
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius);
+  color: var(--primary-text);
+  cursor: pointer;
+  transition: var(--transition);
+  font-weight: 600;
+  font-size: 0.9rem;
+  min-height: 2.5em; /* Prevent shrinking before text loads */
+}
+
+.lang-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.lang-btn.active {
+  background: var(--surface-light);
+  color: var(--primary-solid);
+  border-color: transparent; /* No border when active */
+  font-weight: 700;
+}
+
+/* Back Button Style (used in sections like Library/Videos) */
+.back-btn {
+  background: var(--button-secondary-bg);
+  border: 1px solid var(--button-secondary-border);
+  color: var(--button-secondary-text-color);
+  padding: 0.6rem 1.2rem;
+  border-radius: var(--radius);
+  cursor: pointer;
+  margin-bottom: 2rem; /* Space below the button */
+  transition: var(--transition);
+  font-weight: 600;
+  display: inline-flex; /* Allow icon/text alignment */
+  align-items: center;
+  gap: 0.5rem; /* Space between arrow and text */
+  font-size: 0.9rem;
+  box-shadow: var(--shadow-sm);
+  min-height: 2.5em; /* Prevent shrinking before text loads */
+}
+
+.back-btn::before {
+  content: '←'; /* Left arrow */
+  display: inline-block;
+  margin-right: 0.4rem;
+  font-weight: bold;
+  transition: transform 0.2s ease-out;
+}
+
+.back-btn:hover {
+  background: var(--button-secondary-hover-bg);
+  border-color: var(--button-secondary-hover-border);
+  color: var(--button-secondary-hover-text);
+  box-shadow: var(--shadow);
+}
+
+.back-btn:hover::before {
+  transform: translateX(-3px); /* Move arrow slightly left on hover */
+}
+.back-btn:focus-visible {
+    outline: 2px solid var(--primary-solid);
+    outline-offset: 2px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+ header {
+ flex-direction: column; /* Stack logo and nav on small screens */
+ padding: 1rem;
+ gap: 1rem; /* Space between stacked items */
+ }
+
+ .brand {
+ font-size: 1.2rem;
+ }
+
+  .nav {
+    gap: 0.25rem; /* Smaller gap on small screens */
+  }
+  .nav-btn {
+    padding: 0.5rem 0.8rem;
+    font-size: 0.85rem;
+    flex-grow: 1; /* Allow buttons to fill space */
+    text-align: center;
+  }
+
+ .lang-switcher {
+ margin-left: 0; /* Remove margin when stacked */
+ justify-content: center; /* Center language buttons */
+ width: 100%; /* Make language switcher full width */
+ }
+}
+
+@media (max-width: 480px) {
+  .nav-btn {
+    font-size: 0.8rem;
+    padding: 0.5rem 0.5rem; /* Smaller padding */
+  }
+
+ .lang-btn {
+ font-size: 0.8rem;
+ }
+}

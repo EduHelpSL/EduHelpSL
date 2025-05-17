@@ -1,0 +1,77 @@
+body{font-family:Inter,'Segoe UI',system-ui,-apple-system,BlinkMacSystemFont,sans-serif;background:var(--background);background-image:linear-gradient(180deg,var(--bg-grad-start),var(--bg-grad-end));background-repeat:no-repeat;background-attachment:fixed;color:var(--text-primary);min-height:100vh;display:flex;flex-direction:column;line-height:1.6;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}body.content-loading{opacity:0;visibility:hidden;transition:opacity .3s ease-out,visibility 0s linear .3s}body.content-ready{opacity:1;visibility:visible;transition:opacity .3s ease-out}.main-content{flex:1;padding:2rem 1rem;max-width:1100px;margin:0 auto;width:100%}.page{display:none;width:100%;animation:fadeIn .3s ease-out forwards}.page.active{display:block}.view{display:none;width:100%;padding-top:1rem;animation:fadeIn .3s ease-out forwards}.view.active{display:block}.no-results{text-align:center;color:var(--text-secondary);padding:2.5rem;font-style:italic;font-size:1rem;width:100%}@keyframes fadeIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}.error-message{background-color:#fee2e2;color:#b91c1c;padding:.75rem 1.25rem;border-radius:var(--radius);border:1px solid #fecaca;margin:1rem auto;max-width:600px;text-align:left;font-weight:500;box-shadow:var(--shadow);position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(150%);z-index:1000;opacity:0;transition:opacity .3s ease,transform .4s cubic-bezier(.175, .885, .32, 1.275);pointer-events:none;display:flex;justify-content:space-between;align-items:center;gap:1rem}.error-message.visible{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:auto}.close-error-btn{background:0 0;border:none;color:#991b1b;font-size:1.5rem;line-height:1;cursor:pointer;padding:0 .25rem;opacity:.7;transition:opacity .2s ease}.close-error-btn:hover{opacity:1}.close-error-btn:focus-visible{outline:2px solid #991b1b;outline-offset:1px}
+
+/* Tamil Language Specific Styles */
+:lang(ta) {
+  line-height: 1.7;
+}
+
+:lang(ta) h1, :lang(ta) h2, :lang(ta) h3, :lang(ta) h4, :lang(ta) h5, :lang(ta) h6 {
+  letter-spacing: 0.1px;
+  word-break: break-word; /* Allow long words in headings to break */
+  overflow-wrap: break-word;
+}
+
+:lang(ta) p {
+  line-height: 1.75;
+  overflow-wrap: break-word; /* Allow long words/text in paragraphs to break and wrap */
+  word-break: break-word; /* More aggressive word breaking if needed */
+}
+
+/* General Button Adjustments for Tamil */
+:lang(ta) button,
+:lang(ta) .nav-btn,
+:lang(ta) .cta-btn,
+:lang(ta) .lang-btn {
+  font-size: 0.9em; /* Slightly reduce font size for all buttons in Tamil */
+  letter-spacing: normal;
+  white-space: normal; /* Allow button text to wrap */
+  text-align: center; /* Ensure wrapped text is centered */
+  padding-left: 0.8em; /* Reduce horizontal padding */
+  padding-right: 0.8em;
+  line-height: 1.3; /* Adjust line height for potentially wrapped button text */
+  min-height: 2.8em; /* Ensure buttons can accommodate two lines if needed */
+}
+
+/* Override general Tamil button styles for grade and unit buttons to maintain their original size */
+:lang(ta) .grade-btn {
+  font-size: 1rem; /* Restore original font-size from library.css */
+  padding: 1.25rem; /* Restore original padding from library.css */
+  /* line-height will inherit from :lang(ta) or its own definition in library.css if any */
+  /* min-height: 130px from library.css is more specific and should apply */
+}
+
+:lang(ta) .unit-btn {
+  font-size: 1rem; /* Restore original font-size from videos.css */
+  padding: 1.25rem 1rem; /* Restore original padding from videos.css */
+  line-height: 1.4; /* Restore original line-height from videos.css */
+  /* min-height: 70px from videos.css is more specific and should apply */
+}
+
+
+/* Specific adjustments for header nav buttons if they are still too tight */
+:lang(ta) .nav .nav-btn {
+  padding-left: 0.6rem; /* More specific padding for header nav buttons */
+  padding-right: 0.6rem;
+  flex-shrink: 1; /* Allow buttons to shrink if needed */
+}
+
+/* Adjust gap for button containers */
+:lang(ta) .nav { /* Header nav buttons container */
+  gap: 0.5rem; /* Reduce gap */
+}
+
+:lang(ta) .lang-switcher {
+  gap: 0.3rem; /* Reduce gap */
+}
+
+:lang(ta) .cta-buttons { /* Landing page CTA button container */
+  gap: var(--gap-sm); /* Reduce gap significantly from lg to sm (e.g. 1.25rem to 0.75rem) */
+  flex-wrap: wrap; /* Ensure buttons wrap to next line if they still don't fit */
+}
+
+
+/* For other text elements that might overflow: */
+:lang(ta) [data-lang-key] {
+  overflow-wrap: break-word;
+  /* word-break: break-all; /* Consider this if break-word is not enough, but use with caution */
+}

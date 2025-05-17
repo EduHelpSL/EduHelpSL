@@ -1,0 +1,90 @@
+.header {
+  background: var(--primary);
+  color: var(--primary-text);
+  padding: 0 1.5rem;
+  box-shadow: var(--shadow);
+  height: var(--header-height);
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-right: auto;
+  cursor: pointer;
+  border-radius: var(--radius);
+  padding: 0.25rem 0.5rem;
+  margin-left: -0.5rem;
+  transition: background-color 0.2s ease;
+}
+.brand:hover,
+.brand:focus {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+.brand:focus-visible {
+    outline: 2px solid var(--primary-text);
+    outline-offset: 2px;
+}
+
+
+.logo {
+  height: 40px;
+  filter: drop-shadow(0 1px 1px rgba(var(--shadow-color-rgb), 0.1));
+  flex-shrink: 0;
+}
+
+.brand h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+ color: var(--primary);
+  font-size: 3em;
+}
+
+.nav {
+  display: flex;
+  gap: 0.75rem;
+}
+
+/* Lang switcher only */
+.lang-switcher {
+  display: flex;
+  gap: 0.5rem;
+  margin-left: 1rem;
+}
+
+.lang-btn {
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius);
+  color: var(--primary-text);
+  cursor: pointer;
+  transition: var(--transition);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.lang-btn:hover {
+   background: rgba(255, 255, 255, 0.2);
+  }
+  .lang-btn.active {
+    background: var(--surface);
+    color: var(--primary-solid);
+    border-color: transparent;
+    font-weight: 700;
+  }
