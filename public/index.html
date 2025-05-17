@@ -197,6 +197,7 @@
                 <div class="library-main-controls">
                     <div class="search-container main-search-container">
                          <input type="text" id="mainLibrarySearchInput" class="search-input" placeholder="" data-lang-key="searchResourcesPlaceholder" aria-label="Search all library resources">
+ <buton id="mainLibrarySearchBtn" class="search-button" data-lang-key="searchButonLabel">Search</buton>
                     </div>
                     <div class="filter-row">
                         <div class="filter-container">
@@ -211,8 +212,6 @@
                                 <option value="all" data-lang-key="filterYearAll">All Years</option>
                             </select>
                         </div>
-                    </div>
-                    <div class="filter-row">
                         <div class="filter-container">
                             <label for="mainLibraryTermFilter" class="filter-label" data-lang-key="filterTermLabel">Term:</label>
                             <select id="mainLibraryTermFilter" class="filter-select">
@@ -231,9 +230,8 @@
                                 <option value="other" data-lang-key="filterTypeOther">Other Resources</option>
                             </select>
                         </div>
-                    </div>
+                       </div>
                     <div id="mainLibrarySearchStatus" class="search-status" aria-live="polite" aria-atomic="true"></div>
-                    <buton id="mainLibrarySearchBtn" class="search-button" data-lang-key="searchButonLabel">Search</buton>
                 </div>
                 <div class="grade-grid" id="library-grade-grid"></div>
             </div>
@@ -318,7 +316,7 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <p data-lang-key="footerCopyright"></p>
+            <p id="copyright">© 2025 EduHelp Sri Lanka. All Rights Reserved.</p>
         </div>
     </footer>
 

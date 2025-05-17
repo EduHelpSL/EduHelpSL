@@ -3,8 +3,8 @@
   background: var(--button-secondary-bg);
   border: 1px solid var(--button-secondary-border);
   color: var(--button-secondary-text);
-  padding: 0.6rem 1.2rem;
   border-radius: var(--radius);
+  padding: 0.5rem 1rem; /* Reduced padding */
   cursor: pointer;
   margin-bottom: 2rem;
   transition: var(--transition);
@@ -12,14 +12,13 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 0.9rem;
+  font-size: 0.85rem; /* Slightly reduced font size */
   box-shadow: var(--shadow-sm);
 }
 
 .back-btn::before {
   content: '←';
   display: inline-block;
-  margin-right: 0.4rem;
   font-weight: bold;
   transition: transform 0.2s ease-out;
 }

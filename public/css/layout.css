@@ -128,7 +128,7 @@ body {
 }
 
 .footer-links a.nav-link-footer:hover {
-    color: var(--accent-color-light);
+    color: var(--footer-link-hover-color); /* Changed hover color */
     text-decoration: underline;
 }
 

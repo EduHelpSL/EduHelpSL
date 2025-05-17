@@ -104,6 +104,7 @@ header {
   border-radius: var(--radius);
   cursor: pointer;
   margin-bottom: 2rem; /* Space below the button */
+  margin-left: 1rem;
   transition: var(--transition);
   font-weight: 600;
   display: inline-flex; /* Allow icon/text alignment */
@@ -112,6 +113,7 @@ header {
   font-size: 0.9rem;
   box-shadow: var(--shadow-sm);
   min-height: 2.5em; /* Prevent shrinking before text loads */
+  width: fit-content;
 }
 
 .back-btn::before {

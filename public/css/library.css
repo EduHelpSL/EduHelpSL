@@ -37,19 +37,17 @@
 }
 
 .library-main-controls .filter-row {
-  margin-top: 0.75rem; /* Space above the filter row */
   display: flex;
   gap: 1rem; /* Horizontal gap between filter containers */
-  align-items: center; /* Vertically align items */
+  flex-wrap: wrap; /* Allow wrapping on smaller screens */
 }
-
 .library-main-controls .filter-container {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
   flex-grow: 1;
-  flex-basis: calc(33.33% - 0.66rem); /* Distribute space among 3 filters, accounting for gap */
-  min-width: 120px; /* Smallest size */
+ flex-basis: 0; /* Allow equal distribution based on min-width */
+ min-width: 180px; /* Sufficient width for content */
 }
 
 .library-main-controls .filter-label {
@@ -78,7 +76,7 @@
 }
 
 .library-main-controls .search-button {
-  padding: 0.6rem 1.2rem; /* Adjusted padding to match input height */
+  padding: 0.45rem 1.0rem; /* Adjusted padding to match input height */
   font-size: 0.9rem; 
   font-weight: 600;
   color: var(--primary-text-color);
@@ -105,6 +103,7 @@
   font-size: 0.8rem;
   color: var(--text-tertiary);
   min-height: 1.1em;
+  width: 100%; /* Ensure status takes full width */
   text-align: center;
   margin-top: 0.75rem;
 }
@@ -497,10 +496,13 @@
  .library-main-controls .filter-row {
  flex-wrap: wrap; /* Allow filters to wrap onto multiple lines */
     gap: 0.75rem; /* Adjusted gap for wrapped items */
+ }
+  .library-main-controls .filter-container {
+ flex-basis: calc(50% - 0.375rem); /* Two filters per row with gap */
   }
-  .search-input {
+ .search-input {
     /* width: 100%; */ /* Already covered by flex-grow */
-    font-size: 0.85rem; 
+ font-size: 0.85rem; 
   }
   .library-controls {
     padding: 0.6rem 0.8rem; 
@@ -509,8 +511,7 @@
     padding: 0.8rem 1rem;
   }
 
-  .library-controls .filter-container {
-    flex-basis: calc(50% - 0.375rem); /* Two filters per row with gap */
+ .library-controls .filter-container {
     min-width: unset;
 
     flex-grow: 1; /* Allow filters to grow */
@@ -571,8 +572,8 @@
   .library-main-controls .search-status {
  font-size: 0.7rem;
   }
-
   .library-main-controls .filter-container {
+ flex-basis: 100%; /* Stack filters on very small screens */
     flex-basis: 100%; /* Stack filters on very small screens */
   }
 
@@ -1193,7 +1194,7 @@
   flex-direction: column;
   gap: 0.25rem;
   flex-grow: 1;
-  flex-basis: 25%; /* Give each filter roughly equal width */
+  flex-basis: 12%; /* Give each filter roughly equal width */
   min-width: 120px; /* Smallest size */
 }
 
@@ -1223,7 +1224,7 @@
 }
 
 .library-main-controls .search-button {
-  padding: 0.6rem 1.2rem; /* Adjusted padding to match input height */
+  padding: 0.45rem 1.0rem; /* Adjusted padding to match input height */
   font-size: 0.9rem; 
   font-weight: 600;
   color: var(--primary-text-color);
@@ -1231,7 +1232,7 @@
   border: none;
   border-radius: var(--radius-md);
   cursor: pointer;
- align-self: center; /* Vertically align with input */
+  align-self: center; /* Vertically align with input */
   transition: var(--transition-std);
   box-shadow: var(--shadow-sm);
 }
@@ -1605,10 +1606,10 @@
   }
   .library-main-controls .search-button {
    /* Adjustments for potential wrapping on smaller screens */
-    width: 100%; /* Make button full width if it wraps */
-    margin-top: 0.6rem;
+    width: 15%; /* Make button full width if it wraps */
+    margin-top: 0.2rem;
     padding: 0.5rem 1rem;
-    font-size: 0.85rem;
+    font-size: 0.9rem;
   }
  .library-main-controls .filter-row {
  flex-wrap: wrap; /* Allow filters to wrap onto multiple lines */

@@ -90,12 +90,11 @@ export function updateDynamicTitles() {
 }
 
 // --- Update Copyright Year (tied to translation/init) ---
-export function updateCopyrightYear() {
+export function updateCopyrightYear() { 
     if (dom.copyright) {
         const cy = new Date().getFullYear();
-        const bt = state.translations['footerCopy'] || '© EduHelp SL'; // Get translated base text
-        // Append year if not already present in the translated string
-        dom.copyright.textContent = bt.includes(cy.toString()) ? bt : `${bt} ${cy}`;
+        // Always set the text to include the current year
+        dom.copyright.textContent = `© ${cy} EduHelp Sri Lanka. All Rights Reserved.`;
     }
 }
 
@@ -127,7 +126,7 @@ export function switchActiveView(sectionElement, targetViewId, isBackNavigation 
     if (!foundView) {
         console.error(`Target view "${targetViewId}" not found in section #${sectionElement.id}.`);
         return;
-    }
+   }
 
     // Scroll to the top of the section when switching views,
     // unless it's a back navigation to the grade view.
