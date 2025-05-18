@@ -18,7 +18,7 @@
   --secondary-accent-color-light: hsl(var(--secondary-accent-hue), var(--secondary-accent-saturation), 95%); 
 
   /* --- Base and Neutral Colors --- */
-  --surface-color: #FFFFFF; 
+  --surface-color: #ffffff; 
   --neutral-hue: 210; 
   --neutral-saturation: 5%; 
   --bg-color: hsl(var(--neutral-hue), var(--neutral-saturation), 98%); 
@@ -51,6 +51,7 @@
   --gradient-night-fade: linear-gradient(to top, #d1c4e9 0%, #fce4ec 100%); 
   --gradient-spring-warmth: linear-gradient(to top, #ffe0b2 0%, #fff9c4 100%); 
   --gradient-premium-dark: linear-gradient(to right, #757575 0%, #bdbdbd 100%); 
+  --gradient-midnight-city: linear-gradient(to top, #7abefa 0%, #155db4 100%); 
   --gradient-crystal-clear: linear-gradient(to top, #80deea 0%, #b2ebf2 100%); 
 
 

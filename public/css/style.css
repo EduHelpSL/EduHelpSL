@@ -15,11 +15,8 @@ html {
 /* Body and General Styles */
 body {
   font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-  background: var(--background);
-  background-image: linear-gradient(180deg, var(--bg-grad-start), var(--bg-grad-end));
-  background-repeat: no-repeat;
+  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end)); /* Smooth colorful gradient */
   background-attachment: fixed;
-  color: var(--text-primary);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -194,25 +191,13 @@ body {
 .home-hero {
     padding: 3rem 1rem 4rem 1rem;
     margin: -2rem -1rem 2rem -1rem;
+    color: var(--primary-text); /* Ensure high contrast */
     position: relative;
     background-image: url('../media/background-image.jpg'); /* Corrected path */
+    /* Added multi-tone gradient overlay */
+    background-image: linear-gradient(135deg, var(--accent-color-dark), var(--primary-solid)), url('../media/background-image.jpg'); /* Purple to blue gradient on top of image */
     background-size: cover;
     background-position: center 30%;
-    border-radius: 0 0 var(--radius) var(--radius);
-    overflow: hidden;
-}
-
-.home-hero::before { /* Overlay */
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(255, 255, 255, 0.8); /* White overlay */
-    backdrop-filter: blur(2px);
-    z-index: 1;
-}
 
 .home-hero .hero-content {
     position: relative;
@@ -222,8 +207,40 @@ body {
     text-align: center;
 }
 
+.home-hero h1,
+.home-hero .welcome-text {
+ text-shadow: 2px 2px 6px rgba(var(--shadow-color-rgb), 0.6); /* Add stronger text shadow */
+}
+
+.home-hero .welcome-text {
+    color: var(--primary-light); /* Adjust text color for contrast */
+}
+
+/* Colorful CTA Button */
+.home-hero .cta-button {
+    display: inline-block;
+    margin-top: 2rem;
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--primary-text); /* White text on colorful button */
+    background: linear-gradient(45deg, var(--accent-color), var(--primary-solid)); /* Colorful gradient */ /* Uses defined CSS variables */
+    border: none;
+    border-radius: var(--radius);
+    text-decoration: none;
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition */
+    /* Added hover effect */
+    &:hover {
+   transform: translateY(-3px) scale(1.02);
+   box-shadow: 0 6px 15px rgba(var(--shadow-color-rgb), 0.4);
+    }
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(var(--shadow-color-rgb), 0.3);
+}
+
 .home-content-sections {
     padding: 0 1rem;
+    background-color: var(--surface); /* Add background to content sections */
 }
 
 
@@ -302,7 +319,7 @@ body {
 
 /* Home sections styling */
 .home-section {
-    background-color: var(--surface);
+    background-color: var(--section-bg); /* Use a variable for section background */
     padding: 2rem;
     border-radius: var(--radius);
     margin-bottom: 2rem;
@@ -1026,4 +1043,4 @@ body {
     padding: 0.4rem 0.6rem;
     background-color: rgba(255, 255, 255, 0.15); /* Semi-transparent on user bubble */
     border-radius: calc(var(--radius) / 2);
-}
+}}

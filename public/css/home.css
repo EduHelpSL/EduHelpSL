@@ -94,7 +94,7 @@
 .hero-title,
 .hero-tagline,
 .hero-description {
-    color: var(--text-primary);
+    color: white;
 }
 
 .hero-title {
@@ -324,6 +324,7 @@
   background-color: var(--button-secondary-bg);
   color: var(--button-secondary-text-color);
   line-height: 1.5;
+  margin: 1rem;
 }
 
 .cta-btn:hover,
