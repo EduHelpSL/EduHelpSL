@@ -125,7 +125,7 @@ async function initializeApp() {
 
     // 9. Register Service Worker for caching
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/service-worker.js')
+        navigator.serviceWorker.register('service-worker.js')
             .then((registration) => {
                 console.log('Service Worker registered with scope:', registration.scope);
 

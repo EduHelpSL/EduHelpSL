@@ -1,4 +1,130 @@
-body{font-family:Inter,'Segoe UI',system-ui,-apple-system,BlinkMacSystemFont,sans-serif;background:var(--gradient-surface-subtle-blue);background-repeat:no-repeat;background-attachment:fixed;color:var(--text-primary);min-height:100vh;display:flex;flex-direction:column;line-height:1.6;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}body.content-loading{opacity:0;visibility:hidden;transition:opacity .3s ease-out,visibility 0s linear .3s}body.content-ready{opacity:1;visibility:visible;transition:opacity .3s ease-out}.main-content{flex:1;padding:2rem 1rem;max-width:1100px;margin:0 auto;width:100%}.page{display:none;width:100%;animation:fadeIn .3s ease-out forwards}.page.active{display:block}.view{display:none;width:100%;padding-top:1rem;animation:fadeIn .3s ease-out forwards}.view.active{display:block}.no-results{text-align:center;color:var(--text-secondary);padding:2.5rem;font-style:italic;font-size:1rem;width:100%}@keyframes fadeIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}.error-message{background-color:#fee2e2;color:#b91c1c;padding:.75rem 1.25rem;border-radius:var(--radius);border:1px solid #fecaca;margin:1rem auto;max-width:600px;text-align:left;font-weight:500;box-shadow:var(--shadow);position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(150%);z-index:1000;opacity:0;transition:opacity .3s ease,transform .4s cubic-bezier(.175, .885, .32, 1.275);pointer-events:none;display:flex;justify-content:space-between;align-items:center;gap:1rem}.error-message.visible{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:auto}.close-error-btn{background:0 0;border:none;color:#991b1b;font-size:1.5rem;line-height:1;cursor:pointer;padding:0 .25rem;opacity:.7;transition:opacity .2s ease}.close-error-btn:hover{opacity:1}.close-error-btn:focus-visible{outline:2px solid #991b1b;outline-offset:1px}
+body {
+  font-family: Inter, 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--gradient-surface-subtle-blue);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body.content-loading {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease-out, visibility 0s linear 0.3s;
+}
+
+body.content-ready {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.3s ease-out;
+}
+
+.main-content {
+  flex: 1;
+  padding: 2rem 1rem;
+  max-width: 1100px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.page {
+  display: none;
+  width: 100%;
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+.page.active {
+  display: block;
+}
+
+.view {
+  display: none;
+  width: 100%;
+  padding-top: 1rem;
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+.view.active {
+  display: block;
+}
+
+.no-results {
+  text-align: center;
+  color: var(--text-secondary);
+  padding: 2.5rem;
+  font-style: italic;
+  font-size: 1rem;
+  width: 100%;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.error-message {
+  background-color: #fee2e2;
+  color: #b91c1c;
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--radius);
+  border: 1px solid #fecaca;
+  margin: 1rem auto;
+  max-width: 600px;
+  text-align: left;
+  font-weight: 500;
+  box-shadow: var(--shadow);
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%) translateY(150%);
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  pointer-events: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.error-message.visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
+}
+
+.close-error-btn {
+  background: 0 0;
+  border: none;
+  color: #991b1b;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 0.25rem;
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+}
+
+.close-error-btn:hover {
+  opacity: 1;
+}
+
+.close-error-btn:focus-visible {
+  outline: 2px solid #991b1b;
+  outline-offset: 1px;
+}
 
 /* Tamil Language Specific Styles */
 :lang(ta) {
@@ -47,7 +173,6 @@ body{font-family:Inter,'Segoe UI',system-ui,-apple-system,BlinkMacSystemFont,san
   /* min-height: 70px from videos.css is more specific and should apply */
 }
 
-
 /* Specific adjustments for header nav buttons if they are still too tight */
 :lang(ta) .nav .nav-btn {
   padding-left: 0.6rem; /* More specific padding for header nav buttons */
@@ -68,7 +193,6 @@ body{font-family:Inter,'Segoe UI',system-ui,-apple-system,BlinkMacSystemFont,san
   gap: var(--gap-sm); /* Reduce gap significantly from lg to sm (e.g. 1.25rem to 0.75rem) */
   flex-wrap: wrap; /* Ensure buttons wrap to next line if they still don't fit */
 }
-
 
 /* For other text elements that might overflow: */
 :lang(ta) [data-lang-key] {

@@ -1599,7 +1599,7 @@
   }
   .library-main-controls .search-button {
    /* Adjustments for potential wrapping on smaller screens */
-    width: 23%; /* Make button full width if it wraps */
+    width: 25%; /* Make button full width if it wraps */
     margin-top: 0.2rem;
     padding: 0.5rem 1rem;
     font-size: 0.9rem;
