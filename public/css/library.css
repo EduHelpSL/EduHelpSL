@@ -112,11 +112,13 @@
 .grade-grid,
 .resource-type-grid {
   display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 1rem; /* Reduced gap for a tighter look if controls are smaller */
   margin-top: 1.5rem; /* Reduced margin-top if controls are smaller */
   width: 100%;
+  padding: 0; /* Remove default padding */
+  list-style: none; /* Remove default list styling if applicable */
 }
-
 .grade-grid {
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* Slightly smaller minmax */
 }
@@ -483,8 +485,7 @@
 
 @media (max-width: 768px) {
   .grade-grid {
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-    gap: 0.75rem;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   }
   .library-main-controls .search-button {
    /* Adjustments for potential wrapping on smaller screens */
@@ -500,10 +501,6 @@
   .library-main-controls .filter-container {
  flex-basis: calc(50% - 0.375rem); /* Two filters per row with gap */
   }
- .search-input {
-    /* width: 100%; */ /* Already covered by flex-grow */
- font-size: 0.85rem; 
-  }
   .library-controls {
     padding: 0.6rem 0.8rem; 
   }
@@ -516,15 +513,11 @@
 
     flex-grow: 1; /* Allow filters to grow */
   }
-
 @media (max-width: 480px) {
   .grade-grid {
-    gap: 0.6rem;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   }
-  .grade-btn,
-  .resource-type-btn {
-    padding: 1rem 0.8rem;
-    font-size: 0.9rem;
+  .grade-btn, .resource-type-btn {
     min-height: 110px;
     border-radius: var(--radius-md);
   }
@@ -576,7 +569,6 @@
  flex-basis: 100%; /* Stack filters on very small screens */
     flex-basis: 100%; /* Stack filters on very small screens */
   }
-
   .resource-items {
     gap: 0.6rem;
   }
@@ -1142,6 +1134,7 @@
     font-size: 0.8rem;
   }
 }
+
 }
 }
 /* --- Library Styles --- */
@@ -1606,7 +1599,7 @@
   }
   .library-main-controls .search-button {
    /* Adjustments for potential wrapping on smaller screens */
-    width: 15%; /* Make button full width if it wraps */
+    width: 23%; /* Make button full width if it wraps */
     margin-top: 0.2rem;
     padding: 0.5rem 1rem;
     font-size: 0.9rem;

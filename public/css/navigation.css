@@ -89,10 +89,11 @@ header {
 }
 
 .lang-btn.active {
-  background: var(--surface-light);
-  color: var(--primary-solid);
   border-color: transparent; /* No border when active */
   font-weight: 700;
+  background-color: #e0e0e0; /* Subtle light gray background */
+  color: var(--text-primary); /* Maintain text color */
+  font-weight: 700; /* Slightly bolder text */
 }
 
 /* Back Button Style (used in sections like Library/Videos) */
@@ -143,7 +144,7 @@ header {
 @media (max-width: 768px) {
  header {
  flex-direction: column; /* Stack logo and nav on small screens */
- padding: 1rem;
+ padding: 0.5rem;
  gap: 1rem; /* Space between stacked items */
  }
 
@@ -152,7 +153,7 @@ header {
  }
 
   .nav {
-    gap: 0.25rem; /* Smaller gap on small screens */
+    gap: 0.25rem;
   }
   .nav-btn {
     padding: 0.5rem 0.8rem;
