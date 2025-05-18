@@ -39,4 +39,4 @@ This project is open-source and available under the MIT License.
 For questions or suggestions, please reach out to:
 
 * **Email**: [eduhelpsl2025@gmail.com](mailto:your.email@example.com)
-* **GitHub**: [EduHelp Sri Lanka GitHub](https://github.com/yourusername/eduhelp-sri-lanka)
+* **GitHub**: [EduHelp Sri Lanka GitHub](https://github.com/EduHelpSL/EduHelpSL/)
