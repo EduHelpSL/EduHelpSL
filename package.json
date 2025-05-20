@@ -17,7 +17,7 @@
     "express": "^5.1.0",
     "firebase": "^11.7.3",
     "genkit": "^1.8.0",
-    "gh": "^2.0.9",
+    "gh": "^2.8.9",
     "github": "^14.0.0",
     "patch-package": "^8.0.0",
     "recharts": "^2.15.1"
