@@ -2,10 +2,9 @@
 
 // Define a cache name with a version number to manage updates.
 // Increment this version when you update any of the urlsToCache or the SW logic.
-const CACHE_NAME = "my-site-cache-v2"; // Example: incremented version
+const CACHE_NAME = "my-site-cache-v2"; // Incremented version for the new logic
 
 // List the static assets that should be pre-cached.
-// These paths are relative to the service worker's location (usually the root).
 const urlsToCache = [
   "/",
   "/index.html",
@@ -42,9 +41,7 @@ const urlsToCache = [
   "/languages/ta.json",
   "/assets/media/background-image.jpg",
   "/assets/media/hero-bg.jpg",
-  "/assets/media/logo.png",
-  // Consider adding an offline fallback page here if you have one:
-  // e.g., '/offline.html'
+  "/assets/media/logo.png"
 ];
 
 // Install event: This is triggered when the service worker is first registered or updated.
@@ -52,8 +49,25 @@ const urlsToCache = [
 self.addEventListener("install", (event) => {
   console.log(`Service Worker (${CACHE_NAME}): Install event`);
   event.waitUntil(
+    // Attempt to delete any existing cache with the same name.
+    // This ensures that if an install event runs, it starts fresh for this CACHE_NAME.
+    // Note: caches.delete() resolves to true if deleted, false if not found; it doesn't error on not found.
     caches
-      .open(CACHE_NAME)
+      .delete(CACHE_NAME)
+      .catch((err) => {
+        // Log error if deletion fails for unexpected reasons, but don't stop the process.
+        console.warn(
+          `Service Worker (${CACHE_NAME}): Could not delete cache ${CACHE_NAME} during pre-install cleanup. This is usually fine if the cache didn't exist. Error:`,
+          err
+        );
+        return Promise.resolve(); // Continue the chain
+      })
+      .then(() => {
+        console.log(
+          `Service Worker (${CACHE_NAME}): Ensured any previous cache named '${CACHE_NAME}' is cleared. Opening new cache.`
+        );
+        return caches.open(CACHE_NAME);
+      })
       .then((cache) => {
         console.log(
           `Service Worker (${CACHE_NAME}): Caching app shell listed in urlsToCache`
@@ -61,24 +75,22 @@ self.addEventListener("install", (event) => {
         return cache.addAll(urlsToCache);
       })
       .then(() => {
-        // Force the waiting service worker to become the active service worker.
         console.log(
           `Service Worker (${CACHE_NAME}): App shell cached, skipping waiting.`
         );
-        return self.skipWaiting();
+        return self.skipWaiting(); // Force the waiting service worker to become the active service worker.
       })
       .catch((error) => {
         console.error(
           `Service Worker (${CACHE_NAME}): Failed to cache app shell during install. One or more URLs in urlsToCache might be incorrect or unreachable.`,
           error
         );
-        // If addAll fails, the SW installation will fail.
       })
   );
 });
 
 // Activate event: This is triggered when the service worker becomes active.
-// It's used to clean up old caches and take control of clients.
+// It's used to clean up old caches (from different CACHE_NAME versions) and take control of clients.
 self.addEventListener("activate", (event) => {
   console.log(`Service Worker (${CACHE_NAME}): Activate event`);
   event.waitUntil(
@@ -88,9 +100,10 @@ self.addEventListener("activate", (event) => {
         return Promise.all(
           cacheNames.map((cacheName) => {
             // Delete caches that don't match the current active CACHE_NAME.
+            // This is crucial for removing outdated caches from previous versions.
             if (cacheName !== CACHE_NAME) {
               console.log(
-                `Service Worker (${CACHE_NAME}): Deleting old cache:`,
+                `Service Worker (${CACHE_NAME}): Deleting old versioned cache:`,
                 cacheName
               );
               return caches.delete(cacheName);
@@ -99,12 +112,10 @@ self.addEventListener("activate", (event) => {
         );
       })
       .then(() => {
-        // Ensures that the newly activated service worker takes control of all open clients (pages)
-        // without needing a reload.
         console.log(
           `Service Worker (${CACHE_NAME}): Old caches cleaned, claiming clients.`
         );
-        return self.clients.claim();
+        return self.clients.claim(); // Ensures that the newly activated service worker takes control of all open clients.
       })
       .catch((error) => {
         console.error(
@@ -115,95 +126,60 @@ self.addEventListener("activate", (event) => {
   );
 });
 
-// Fetch event: This is triggered for every network request made by the page.
-// It intercepts requests and serves assets from the cache if available (Cache-First strategy).
-// Otherwise, it fetches from the network, caches the response (if valid), and returns it.
+// Fetch event: Intercepts network requests.
 self.addEventListener("fetch", (event) => {
-  // We only want to handle GET requests for caching purposes.
-  // Other methods (POST, PUT, DELETE etc.) are typically not cacheable or have side effects.
   if (event.request.method !== "GET") {
-    // For non-GET requests, let the browser handle them as usual (pass through to the network).
-    return;
+    return; // Only handle GET requests for caching.
   }
 
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
-      // Cache hit - return response from cache
       if (cachedResponse) {
         // console.log(`Service Worker (${CACHE_NAME}): Serving from cache: ${event.request.url}`);
-        return cachedResponse;
+        return cachedResponse; // Serve from cache if found.
       }
 
       // console.log(`Service Worker (${CACHE_NAME}): Not in cache, fetching from network: ${event.request.url}`);
-
-      // IMPORTANT: Check the request URL scheme before attempting to cache.
-      // The Cache API only supports http and https schemes.
       const requestUrl = new URL(event.request.url);
       if (requestUrl.protocol !== "http:" && requestUrl.protocol !== "https:") {
-        // If the scheme is not http or https (e.g., 'chrome-extension:', 'blob:', etc.),
-        // don't try to cache it. Just fetch it and return the response directly.
         // console.log(`Service Worker (${CACHE_NAME}): Unsupported scheme ('${requestUrl.protocol}'), fetching directly (no cache): ${event.request.url}`);
-        return fetch(event.request);
+        return fetch(event.request); // Don't cache non-http/https requests.
       }
 
-      // Clone the request because it's a stream and can only be consumed once.
-      // One for the fetch, one for the cache.put if needed.
       const fetchRequest = event.request.clone();
-
       return fetch(fetchRequest)
         .then((networkResponse) => {
-          // Check if we received a valid response to cache.
-          // - Response must exist.
-          // - Status must be 200 (OK).
-          // - Response type 'basic' indicates same-origin requests (good for caching app assets).
-          //   Other types like 'opaque' are for cross-origin requests without CORS;
-          //   they can be cached but their contents are not inspectable by the SW.
           if (
             !networkResponse ||
             networkResponse.status !== 200 ||
-            networkResponse.type !== "basic"
+            networkResponse.type !== "basic" // Cache only same-origin 'basic' responses.
           ) {
             // console.log(`Service Worker (${CACHE_NAME}): Not caching invalid or non-basic response: ${event.request.url} (Status: ${networkResponse ? networkResponse.status : 'N/A'}, Type: ${networkResponse ? networkResponse.type : 'N/A'})`);
-            return networkResponse; // Return the problematic response as is, without caching.
+            return networkResponse; // Return non-cacheable response as is.
           }
 
-          // Clone the response because it's a stream and can only be consumed once.
-          // One for the browser, one for the cache.
           const responseToCache = networkResponse.clone();
-
           caches.open(CACHE_NAME).then((cache) => {
             // console.log(`Service Worker (${CACHE_NAME}): Caching new resource: ${event.request.url}`);
-            cache
-              .put(event.request, responseToCache) // This is where the 'chrome-extension' error would occur if the scheme check above was missing
-              .catch((cachePutError) => {
-                // Log caching errors, but don't let them break the main fetch flow.
-                console.warn(
-                  `Service Worker (${CACHE_NAME}): Failed to put resource in cache: ${event.request.url}`,
-                  cachePutError
-                );
-              });
+            cache.put(event.request, responseToCache).catch((cachePutError) => {
+              console.warn(
+                `Service Worker (${CACHE_NAME}): Failed to put resource in cache: ${event.request.url}`,
+                cachePutError
+              );
+            });
           });
-
-          return networkResponse; // Return the original network response to the browser.
+          return networkResponse; // Return original network response to the browser.
         })
         .catch((fetchError) => {
-          // This catch handles network errors (e.g., user is offline).
           console.warn(
             `Service Worker (${CACHE_NAME}): Network fetch failed for: ${event.request.url}`,
             fetchError
           );
-
-          // OPTIONAL: Fallback for navigation requests when offline.
-          // Ensure '/offline.html' is in urlsToCache if you use this.
-          // if (event.request.mode === 'navigate') {
-          //     return caches.match('/offline.html').then(offlineResponse => {
-          //         return offlineResponse || new Response("You are offline. Please check your connection.", { headers: { 'Content-Type': 'text/html' }});
-          //     });
+          // Optional: Fallback to an offline page if the request is for navigation.
+          // if (event.request.mode === 'navigate' && urlsToCache.includes('/offline.html')) {
+          //     return caches.match('/offline.html');
           // }
-
-          // Rethrow the error to let the browser handle it as a failed network request.
-          // The page's JavaScript might have its own error handling for failed fetches.
-          throw fetchError;
+          throw fetchError; // Propagate fetch error.
         });
     })
   );

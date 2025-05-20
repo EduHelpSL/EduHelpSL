@@ -39,7 +39,12 @@ next-env.d.ts
 
 .genkit/*
 .env*
+.env
 
 # firebase
 firebase-debug.log
 firestore-debug.log
+
+# backend
+/backend
+backend
