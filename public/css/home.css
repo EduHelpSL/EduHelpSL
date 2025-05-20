@@ -1,0 +1,371 @@
+/* --- Modern Sleek Home Page Styles --- */
+
+/* General Section Styling */
+#home section {
+    padding: var(--gap-xl) var(--gap-lg);
+    margin-bottom: var(--gap-xxl);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+    opacity: 0; 
+    transform: translateY(30px); 
+    transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); /* Faster animation */
+    color: var(--text-primary);
+}
+
+#home section.in-view {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+#home section:nth-child(1) { transition-delay: 0.05s; }
+#home section:nth-child(2) { transition-delay: 0.1s; } /* Stagger delays can remain or be slightly reduced if desired */
+#home section:nth-child(3) { transition-delay: 0.15s; }
+#home section:nth-child(4) { transition-delay: 0.2s; }
+#home section:nth-child(5) { transition-delay: 0.25s; }
+#home section:nth-child(6) { transition-delay: 0.3s; }
+
+/* Alternating Section Backgrounds with Gradients */
+/* Using a transition on the background property provides a smoother visual change */
+#home section:nth-child(odd) {
+    background: var(--gradient-midnight-city);
+    transition: background 0.5s ease-in-out, color 0.5s ease-in-out;
+}
+#home section:nth-child(even) {
+ background: var(--gradient-orange-coral);
+    color: var(--text-primary);
+    transition: background 0.5s ease-in-out, color 0.5s ease-in-out;
+}
+
+#home section.core-features-section { 
+    background: var(--gradient-crystal-clear); /* Core features remains distinct */
+ color: var(--text-primary);
+}
+#home section.core-features-section h2,
+#home section.core-features-section .section-intro-text,
+#home section.core-features-section .feature-item h3,
+#home section.core-features-section .feature-item p {
+    color: var(--text-primary);
+}
+#home section.core-features-section .feature-item i {
+    color: var(--accent-color);
+}
+
+#home h2 {
+    font-family: var(--font-secondary), sans-serif;
+    font-size: clamp(var(--text-3xl), 5vw, var(--text-4xl));
+    text-align: center;
+    margin-bottom: var(--gap-md);
+    position: relative;
+    font-weight: 700;
+}
+
+#home h2::after {
+    content: '';
+    display: block;
+    width: 70px;
+    height: 4px;
+    background: var(--gradient-primary);
+    margin: var(--gap-sm) auto var(--gap-xl);
+    border-radius: var(--radius-sm);
+}
+
+#home .section-intro-text {
+    font-size: clamp(var(--text-md), 2.5vw, var(--text-lg));
+    text-align: center;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: var(--gap-xl);
+    line-height: 1.85;
+}
+
+/* Hero Section */
+.hero-section {
+    padding: var(--gap-xxl) var(--gap-lg) var(--gap-xxxl);
+    text-align: center;
+    background: var(--gradient-deep-sky); 
+    color: var(--text-primary);
+    border-radius: 0;
+    margin-bottom: var(--gap-xxl);
+    box-shadow: none;
+}
+
+.hero-title,
+.hero-tagline,
+.hero-description {
+    color: white;
+}
+
+.hero-title {
+    font-size: clamp(var(--text-4xl), 8vw, var(--text-7xl));
+    font-weight: 800;
+    margin-bottom: var(--gap-md);
+    animation: fadeInDownSleek 0.4s ease-out; /* Faster animation */
+}
+
+.hero-tagline {
+    font-size: clamp(var(--text-lg), 4vw, var(--text-2xl));
+    font-weight: 500;
+    margin-bottom: var(--gap-md);
+    animation: fadeInUpSleek 0.4s ease-out 0.1s; /* Faster animation, adjusted delay */
+    opacity: 0;
+    animation-fill-mode: forwards;
+}
+
+.hero-description {
+    font-size: clamp(var(--text-md), 2.5vw, var(--text-lg));
+    max-width: 700px;
+    margin: 0 auto var(--gap-xl) auto;
+    line-height: 1.75;
+    animation: fadeInUpSleek 0.4s ease-out 0.2s; /* Faster animation, adjusted delay */
+    opacity: 0;
+    animation-fill-mode: forwards;
+}
+
+.hero-cta-buttons {
+    margin-top: var(--gap-xl);
+    animation: fadeInUpSleek 0.4s ease-out 0.3s; /* Faster animation, adjusted delay */
+    opacity: 0;
+    animation-fill-mode: forwards;
+}
+
+/* Card-like items (Why EduHelp, Features) */
+.why-eduhelp-item,
+.feature-item {
+    background-color: var(--surface-color); 
+    padding: var(--gap-xl);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    text-align: center;
+    transition: transform 0.35s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+    border: 1px solid transparent;
+}
+
+#home section.core-features-section .feature-item {
+    background-color: var(--surface-color-alt);
+    border: 1px solid var(--border-color);
+}
+#home section.core-features-section .feature-item:hover {
+    background-color: var(--surface-color);
+}
+
+.why-eduhelp-item:hover,
+.feature-item:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-xl);
+}
+
+/* Why EduHelp Section */
+.why-eduhelp-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+    gap: var(--gap-xl);
+}
+
+.why-eduhelp-item i {
+    font-size: 3.2rem;
+    margin-bottom: var(--gap-md);
+    display: inline-block;
+    padding: var(--gap-sm);
+    background: var(--gradient-primary); 
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    transition: transform 0.3s ease;
+}
+
+.why-eduhelp-item:hover i {
+    transform: scale(1.15) rotate(-5deg);
+}
+    
+.why-eduhelp-item h3 {
+    font-size: var(--text-xl);
+    color: var(--text-primary); 
+    font-weight: 600;
+    margin-top: 0;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+    gap: var(--gap-xl);
+}
+
+/* Testimonials Section */
+#home section.testimonials-section {
+    background: var(--gradient-night-fade); 
+    color: var(--text-primary);
+}
+#home section.testimonials-section h2,
+#home section.testimonials-section .section-intro-text {
+    color: var(--text-primary);
+}
+
+.testimonial-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: var(--gap-xl);
+}
+
+.testimonial-card {
+    background-color: var(--surface-color-alt);
+    border: 1px solid var(--border-color);
+    padding: var(--gap-xl);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    border-left: 6px solid var(--accent-color-light); 
+    transition: transform 0.35s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.testimonial-card:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: var(--shadow-xl);
+    background-color: var(--surface-color);
+}
+
+.testimonial-text {
+    font-style: italic;
+    color: var(--text-secondary);
+    margin-bottom: var(--gap-lg);
+    line-height: 1.75;
+    font-size: var(--text-md);
+    position: relative;
+}
+
+.testimonial-text::before {
+    content: '\201C';
+    font-size: 3rem;
+    color: var(--accent-color-medium);
+    position: absolute;
+    top: -0.5em;
+    left: -0.2em;
+    opacity: 0.7;
+}
+
+.testimonial-author {
+    font-weight: 700;
+    color: var(--text-primary);
+    text-align: right;
+    margin-top: var(--gap-md);
+    font-size: var(--text-sm);
+}
+
+.testimonial-author::before {
+    content: ' ';
+}
+
+/* Screenshots Section */
+.screenshots-carousel img:hover {
+    transform: scale(1.08) rotate(1deg);
+    opacity: 1;
+    box-shadow: var(--shadow-xl);
+}
+
+/* About Section */
+#home section.about-section {
+    background: var(--gradient-spring-warmth);
+    color: var(--text-primary); 
+}
+#home section.about-section h2,
+#home section.about-section p {
+    color: var(--text-primary); 
+}
+
+.mission-statement {
+    margin-top: var(--gap-xl);
+    padding: var(--gap-xl);
+    background-color: hsla(var(--neutral-hue), var(--neutral-saturation), 15%, 0.05);
+    border-radius: var(--radius-lg);
+    border-left: 6px solid var(--accent-color);
+}
+
+.mission-statement h3 {
+    font-size: var(--text-xl);
+    margin-bottom: var(--gap-md);
+    font-weight: 600;
+}
+
+/* Get Started / CTA Section */
+#home section.get-started-section {
+    background: var(--gradient-premium-dark);
+    color: var(--text-primary);
+}
+#home section.get-started-section h2 {
+    color: var(--text-primary);
+}
+
+.get-started-section .cta-buttons {
+    margin-top: var(--gap-lg);
+}
+
+.cta-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--gap-lg);
+  margin-top: var(--gap-xl);
+}
+
+.cta-btn {
+  font-family: var(--font-primary);
+  font-size: var(--text-md);
+  padding: var(--gap-md) var(--gap-xl);
+  border: 2px solid transparent;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow: var(--shadow-sm);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: none;
+  background-color: var(--button-secondary-bg);
+  color: var(--button-secondary-text-color);
+  line-height: 1.5;
+  margin: 1rem;
+}
+
+.cta-btn:hover,
+.cta-btn:focus-visible {
+  background-color: var(--button-secondary-hover-bg);
+  border-color: var(--button-secondary-hover-border, var(--accent-color));
+  color: var(--button-secondary-hover-text-color, var(--text-primary));
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: var(--shadow-lg);
+  outline: none;
+}
+
+.cta-btn.primary {
+ background-color: var(--button-secondary-bg);
+  color: var(--button-secondary-text-color);
+  border: 2px solid transparent;
+  font-weight: 600;
+}
+
+.cta-btn.primary:hover,
+.cta-btn.primary:focus-visible {
+ background-color: var(--button-secondary-hover-bg);
+ border-color: var(--button-secondary-hover-border, var(--accent-color));
+ color: var(--button-secondary-hover-text-color, var(--text-primary));
+ transform: translateY(-4px) scale(1.02);
+  outline: none;
+  box-shadow: var(--shadow-xl);
+}
+
+.cta-btn:focus-visible {
+    outline: 3px solid var(--input-focus-ring);
+    outline-offset: 3px;
+}
+
+/* Keyframe Animations */
+@keyframes fadeInDownSleek {
+    from { opacity: 0; transform: translateY(-30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInUpSleek {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}

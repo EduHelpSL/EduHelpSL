@@ -1,0 +1,233 @@
+/* --- Layout Styles --- */
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+/* General Page and View Visibility */
+.main-content > .page:not(.active) {
+    display: none;
+}
+
+.main-content > .page.active {
+    display: block;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.main-content {
+    padding: var(--gap-md) 0;
+    flex-grow: 1; /* Allow main content to fill available space */
+    width: 100%;
+    max-width: 1200px; /* Consistent max-width for content */
+    flex-direction: column;
+}
+
+.page.active > .view:not(.active) {
+    display: none;
+}
+
+.page.active > .view.active {
+     display: block;
+     height: 100%;
+     display: flex;
+     flex-direction: column;
+}
+
+/* Header Styles */
+.header {
+  background: var(--header-bg); /* Updated to use new variable */
+  color: var(--text-primary); /* Text color appropriate for header-bg */
+  padding: 0 var(--gap-md);
+  box-shadow: var(--header-shadow); /* New shadow variable */
+  height: var(--header-height);
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  z-index: 1000; /* High z-index */
+}
+
+
+.header-container {
+  max-width: 1200px; /* Consistent max-width */
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: var(--gap-md);
+  width: 100%;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  margin-right: auto;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  padding: var(--gap-xs) var(--gap-sm);
+  margin-left: calc(var(--gap-sm) * -1); /* Offset padding */
+  transition: background-color var(--transition-fast);
+}
+.brand:hover,
+.brand:focus {
+    background-color: var(--surface-color-alt);
+}
+.brand:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+.logo {
+  height: 36px; /* Slightly adjusted */
+  flex-shrink: 0;
+}
+
+.brand h1 {
+  font-family: var(--font-secondary), sans-serif;
+  font-size: var(--text-xl); /* Adjusted size */
+  font-weight: 700;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+/* Footer Styles from home.css - integrated and adjusted */
+.footer {
+    background-color: var(--footer-bg);
+    color: var(--footer-text-color);
+    padding: var(--gap-lg) var(--gap-md);
+    font-size: var(--text-sm);
+    margin-top: auto; /* Push to bottom */
+    flex-shrink: 0;
+    border-top: 1px solid hsl(var(--neutral-hue), var(--neutral-saturation), 25%);
+}
+
+.footer-content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--gap-md);
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-links {
+    display: flex;
+    flex-wrap: wrap; /* Allow wrapping on small screens */
+    gap: var(--gap-sm) var(--gap-md); /* Row and column gap */
+}
+
+.footer-links a.nav-link-footer {
+    color: var(--footer-link-color);
+    text-decoration: none;
+    transition: var(--transition-fast);
+}
+
+.footer-links a.nav-link-footer:hover {
+    color: var(--footer-link-hover-color); /* Changed hover color */
+    text-decoration: underline;
+}
+
+.footer-contact p a {
+    color: var(--footer-link-color);
+    text-decoration: none;
+}
+.footer-contact p a:hover {
+    text-decoration: underline;
+}
+
+.footer-bottom {
+    text-align: center;
+    margin-top: var(--gap-md);
+    padding-top: var(--gap-md);
+    border-top: 1px solid hsl(var(--neutral-hue), var(--neutral-saturation), 25%);
+    width:100%;
+}
+
+/* Chat Page Specific Layout */
+.page#chat .chat-container {
+  display: flex;
+  flex-direction: column;
+  /* Adjust height considering new sticky header and potential footer */
+  height: calc(100vh - var(--header-height) - var(--footer-height, 0px) - var(--gap-md)); 
+  max-height: 80vh; 
+  background: var(--surface-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  width: 100%;
+  margin: var(--gap-sm) auto; /* Centering and spacing */
+  min-height: 400px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .header {
+    /* position: static; */ /* Keeping it sticky for now, can be changed */
+    padding: 0 var(--gap-sm);
+    height: auto; /* Allow height to adjust if content wraps */
+    min-height: var(--header-height);
+  }
+  .header-container {
+    gap: var(--gap-xs);
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: var(--gap-xs) 0; /* Padding for wrapped items */
+  }
+  .brand {
+    order: 1;
+    margin-right: 0;
+    padding: var(--gap-xs);
+    margin-left: calc(var(--gap-xs) * -1);
+  }
+  .lang-switcher {
+    order: 2;
+    margin-left: auto; /* Pushes it to the right of brand if space allows */
+  }
+  .nav {
+    order: 3;
+    width: 100%;
+    justify-content: space-around;
+    margin-top: var(--gap-xs);
+    padding-top: var(--gap-xs);
+    border-top: 1px solid var(--border-color);
+  }
+
+ .main-content {
+        padding: var(--gap-sm) 0;
+    padding-top: var(--gap-sm); 
+  }
+
+  .page#chat .chat-container {
+      height: calc(100vh - var(--header-height) - var(--gap-sm)); /* Full available height */
+      max-height: none;
+      margin: 0;
+      border-radius: 0;
+      border-left: 0;
+      border-right: 0;
+      border-bottom: 0;
+      max-width: 100%;
+  }
+
+  .footer-content {
+      flex-direction: column;
+      text-align: center;
+  }
+  .footer-links {
+      justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+    .brand h1 {
+        font-size: var(--text-lg);
+    }
+    .logo {
+        height: 32px;
+    }
+}

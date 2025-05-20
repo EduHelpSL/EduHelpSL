@@ -1,0 +1,56 @@
+/* --- Scroll-to-Top Button --- */
+
+.scroll-top-btn {
+    position: fixed; /* Fixed position in the viewport */
+    bottom: 20px; /* 20px from the bottom */
+    right: 20px; /* 20px from the right */
+    background-color: var(--primary-solid);
+    color: var(--primary-text);
+    border: none;
+    border-radius: 50%; /* Circular button */
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: var(--shadow-lg);
+    opacity: 0; /* Hidden by default */
+    visibility: hidden;
+    transform: translateY(20px); /* Start slightly below final position */
+    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease; /* Transition for smooth appearance */
+    z-index: 999; /* Ensure it's above most content */
+}
+.scroll-top-btn.visible {
+    opacity: 0.8; /* Make it slightly transparent when visible */
+    visibility: visible;
+    transform: translateY(0); /* Slide into view */
+}
+.scroll-top-btn:hover {
+    opacity: 1; /* Fully opaque on hover */
+    background-color: var(--primary-dark); /* Darker background on hover */
+}
+.scroll-top-btn svg {
+    width: 24px;
+    height: 24px;
+    fill: currentColor; /* Use button text color for icon */
+}
+.scroll-top-btn:focus-visible {
+    outline: 2px solid var(--primary-dark);
+    outline-offset: 2px;
+    opacity: 1; /* Ensure full opacity on focus */
+}
+
+/* Responsive Adjustment */
+@media (max-width: 480px) {
+  .scroll-top-btn {
+      width: 40px;
+      height: 40px;
+      bottom: 15px;
+      right: 15px;
+  }
+  .scroll-top-btn svg {
+      width: 20px;
+      height: 20px;
+  }
+}
