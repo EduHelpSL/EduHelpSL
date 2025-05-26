@@ -57,13 +57,14 @@ header {
 }
 
 .login-btn {
-  background-color: var(--accent-color-secondary);
+  background-color: var(--secondary-accent-color);
   color: var(--white);
-  border-color: var(--accent-color-secondary-darker);
+  border-color: var(--secondary-accent-color-dark);
 }
 
 .login-btn:hover {
-  background-color: var(--accent-color-secondary-darker);
+  background-color: var(--secondary-accent-color-dark);
+  color: black;
 }
 
 .nav-btn:hover:not(.active) {

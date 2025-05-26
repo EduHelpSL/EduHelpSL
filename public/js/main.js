@@ -7,17 +7,19 @@ import { state } from "./state.js";
 import { dom, cacheDomElements } from "./domCache.js";
 import { initializeGemini } from "./gemini.js";
 import { setupAllEventListeners } from "./eventListeners.js";
-import { switchLanguage } from "./translation.js";
+import { switchLanguage, getTranslation } from "./translation.js";
 import { navigateToPage, updateCopyrightYear } from "./navigation.js";
 import {
   addChatWelcomeMessage,
   setGeminiInstances as setChatGeminiInstances,
 } from "./chat.js";
 import { autoGrowTextarea, showError } from "./utils.js";
+import { initializeAuth, showAuthError, showAuthMessage } from "./auth.js";
 // Import specific library functions needed for initialization and setup
 import {
-  populateMainGradeFilter,
-  populateMainYearFilter,
+  initializeMainLibraryFilters, // This function seems to be missing, relying on fallback
+  // populateMainGradeFilter, // Fallback - No longer needed
+  // populateMainYearFilter, // Fallback - No longer needed
   setupLibraryEventListeners,
   populateListViewYearFilter, // Corrected import name
   renderResourceList,
@@ -41,12 +43,32 @@ import { HarmCategory, HarmBlockThreshold } from "@google/generative-ai";
 async function initializeEduHelpApp() {
   console.log("Initializing EduHelp App...");
 
+  // Check backend health first
+  try {
+    const { checkBackendHealth } = await import("./apiService.js");
+    const isBackendHealthy = await checkBackendHealth();
+    if (!isBackendHealthy) {
+      console.warn(
+        "Backend server is not responding. Some features may be limited."
+      );
+      showError(
+        "errorBackend",
+        "Backend server unavailable. Some features may be limited.",
+        false
+      );
+    }
+  } catch (error) {
+    console.warn("Could not check backend health:", error);
+  }
+
   // 1. Cache DOM elements FIRST
   if (!cacheDomElements()) {
     console.error(
       "Failed to cache critical DOM elements. Aborting initialization."
     );
-    alert("Fatal Error: Failed to load UI elements. Please refresh the page.");
+    showAuthError(
+      "Fatal Error: Failed to load UI elements. Please refresh the page."
+    );
     return;
   }
   console.log("DOM elements cached.");
@@ -79,36 +101,55 @@ async function initializeEduHelpApp() {
     return; // Abort if initial language fails
   }
 
-  // 4. Initialize Gemini
-  const geminiInstances = initializeGemini(
-    config,
-    HarmCategory,
-    HarmBlockThreshold
-  );
-  if (geminiInstances) {
-    setChatGeminiInstances(
-      geminiInstances.genAI,
-      geminiInstances.modelInstance,
-      geminiInstances.isGeminiActive
+  // 4. Initialize authentication
+  try {
+    await initializeAuth();
+    console.log("Authentication initialized successfully.");
+  } catch (error) {
+    console.error("Failed to initialize authentication:", error);
+  }
+
+  // 5. Initialize Gemini
+  try {
+    const geminiInstances = await initializeGemini(
+      config,
+      HarmCategory,
+      HarmBlockThreshold
     );
-    console.log("Gemini instances set in chat module.");
-  } else {
-    console.warn("Gemini initialization failed or skipped.");
+    if (geminiInstances) {
+      setChatGeminiInstances(
+        geminiInstances.genAI,
+        geminiInstances.modelInstance,
+        geminiInstances.isGeminiActive
+      );
+      console.log("Gemini instances set in chat module.");
+    } else {
+      console.warn("Gemini initialization failed or skipped.");
+      setChatGeminiInstances(null, null, false);
+    }
+  } catch (error) {
+    console.error("Failed to initialize Gemini:", error);
+    showError(
+      "errorChatInit",
+      "Failed to initialize chat service. Please ensure the backend server is running.",
+      true
+    );
+    // Set inactive instances to disable chat
     setChatGeminiInstances(null, null, false);
   }
 
-  // 5. Set dynamic rendering functions in commonRendering module
+  // 6. Set dynamic rendering functions in commonRendering module
   setRenderingFunctions(
     { populateYearFilter: populateListViewYearFilter, renderResourceList }, // Library functions
     { renderUnitGrid, renderVideoList } // Videos functions
   );
   console.log("Dynamic rendering functions linked.");
 
-  // 6. Setup all event listeners
+  // 7. Setup all event listeners
   setupAllEventListeners(); // This should internally call setupLibraryEventListeners, setupVideosEventListeners, etc.
   console.log("Event listeners set up.");
 
-  // 7. Set initial page/view state correctly
+  // 8. Set initial page/view state correctly
   dom.pages.forEach((page) =>
     page.classList.toggle("active", page.id === state.currentPage)
   );
@@ -123,13 +164,34 @@ async function initializeEduHelpApp() {
     homeView.classList.add("active");
   }
 
-  // 8. Populate initial UI content
+  // 9. Populate initial UI content
   if (dom.libraryGradeGrid) populateGradeGrid(dom.libraryGradeGrid);
   if (dom.videoGradeGrid) populateGradeGrid(dom.videoGradeGrid);
 
-  // Populate the NEW main library filters
-  populateMainGradeFilter();
-  populateMainYearFilter();
+  // Initialize library data from Google Drive
+  try {
+    // Import the function dynamically to avoid circular dependencies
+    const { initializeLibraryData } = await import("./library.js");
+    if (typeof initializeLibraryData === "function") {
+      await initializeLibraryData();
+      console.log("Library data initialized from Google Drive");
+    } else {
+      console.error(
+        "'initializeLibraryData' function not found. Check library.js exports."
+      );
+    }
+  } catch (error) {
+    console.error("Failed to initialize library data:", error);
+  }
+
+  // Populate the NEW main library filters using the integrated function
+  if (typeof initializeMainLibraryFilters === "function") {
+    initializeMainLibraryFilters();
+  } else {
+    console.error(
+      "'initializeMainLibraryFilters' function not found. Check library.js exports."
+    );
+  }
 
   // Initialize chat state and UI
   if (dom.chatInput) autoGrowTextarea(dom.chatInput);
@@ -142,7 +204,7 @@ async function initializeEduHelpApp() {
 
   console.log("EduHelp App Initialized successfully.");
 
-  // 9. Register Service Worker for caching
+  // 10. Register Service Worker for caching
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker
       .register("service-worker.js")
@@ -171,147 +233,101 @@ document.addEventListener("DOMContentLoaded", () => {
 // --- Login Popup and Firebase Auth Logic ---
 // Function-level comments included for clarity
 
-// Firebase config (replace with your actual config)
-const firebaseConfig = {
-  apiKey: "AIzaSyD4FUcysOzLLlKnZjlg6gfR2Wbddag2ei8",
-  authDomain: "eduhelp-sl.firebaseapp.com",
-  databaseURL:
-    "https://eduhelp-sl-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "eduhelp-sl",
-  storageBucket: "eduhelp-sl.firebasestorage.app",
-  messagingSenderId: "258793073514",
-  appId: "1:258793073514:web:310cf2f42767f7d0925313",
-  measurementId: "G-E6XTJKR9FW",
-};
-
-// Initialize Firebase only if not already initialized
-if (typeof window.firebase === "undefined") {
-  const script = document.createElement("script");
-  script.src =
-    "https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js";
-  script.onload = () => {
-    const authScript = document.createElement("script");
-    authScript.src =
-      "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js";
-    authScript.onload = () => {
-      window.firebase.initializeApp(firebaseConfig);
-      // Analytics and other Firebase services can be initialized here if needed
-      setupAuthUI(); // Initialize authentication UI after Firebase loads
-    };
-    document.head.appendChild(authScript);
-  };
-  document.head.appendChild(script);
-} else {
-  setupAuthUI(); // Firebase already loaded
-}
-
 /**
- * Sets up authentication UI logic: listens for auth state changes,
- * hides login button and shows user profile image on login.
+ * Sets up the Firebase authentication state observer.
+ * Updates the application state based on user login status.
  */
-function setupAuthUI() {
-  const auth = window.firebase.auth();
-  const loginBtn = document.getElementById("loginBtn");
-  const profileContainerId = "profilePicContainer";
-  const dropdownId = "profileDropdownMenu";
-
-  // Create a container for the profile image if not present
-  let profilePicContainer = document.getElementById(profileContainerId);
-  if (!profilePicContainer) {
-    profilePicContainer = document.createElement("div");
-    profilePicContainer.id = profileContainerId;
-    profilePicContainer.style.display = "none";
-    profilePicContainer.style.alignItems = "center";
-    profilePicContainer.style.justifyContent = "center";
-    profilePicContainer.style.position = "relative";
-    if (loginBtn && loginBtn.parentNode) {
-      loginBtn.parentNode.insertBefore(
-        profilePicContainer,
-        loginBtn.nextSibling
-      );
-    } else {
-      document.body.appendChild(profilePicContainer);
-    }
-  }
-
-  // Remove any existing dropdown to avoid duplicates
-  let dropdownMenu = document.getElementById(dropdownId);
-  if (dropdownMenu) dropdownMenu.remove();
-
-  // Create dropdown menu for logout
-  dropdownMenu = document.createElement("div");
-  dropdownMenu.id = dropdownId;
-  dropdownMenu.className = "profile-dropdown-menu";
-  dropdownMenu.style.display = "none";
-  dropdownMenu.innerHTML =
-    '<button id="logoutBtn" class="profile-dropdown-logout">Logout</button>';
-  profilePicContainer.appendChild(dropdownMenu);
-
-  // Listen for authentication state changes
-  auth.onAuthStateChanged(function (user) {
+function setupAuthStateObserver() {
+  firebase.auth().onAuthStateChanged((user) => {
     if (user) {
-      // User is signed in, hide login button
-      if (loginBtn) loginBtn.style.display = "none";
-      // Show profile picture
-      if (user.photoURL) {
-        profilePicContainer.innerHTML = "";
-        const img = document.createElement("img");
-        img.src = user.photoURL;
-        img.alt = "Profile";
-        img.style.width = "40px";
-        img.style.height = "40px";
-        img.style.borderRadius = "50%";
-        img.style.objectFit = "cover";
-        img.style.boxShadow = "0 0 4px rgba(0,0,0,0.2)";
-        img.title = user.displayName || "User";
-        img.style.cursor = "pointer";
-        profilePicContainer.appendChild(img);
-        profilePicContainer.appendChild(dropdownMenu);
-        profilePicContainer.style.display = "flex";
-
-        // Toggle dropdown on profile pic click
-        img.onclick = function (e) {
-          e.stopPropagation();
-          dropdownMenu.style.display =
-            dropdownMenu.style.display === "block" ? "none" : "block";
-        };
-        // Hide dropdown when clicking outside
-        document.addEventListener("click", function hideDropdown(ev) {
-          if (!profilePicContainer.contains(ev.target)) {
-            dropdownMenu.style.display = "none";
-          }
-        });
+      // User is signed in.
+      console.log("User is signed in:", user);
+      state.auth.isUserLoggedIn = true;
+      state.auth.userProfile = {
+        displayName: user.displayName,
+        email: user.email,
+        photoURL: user.photoURL,
+        uid: user.uid,
+      };
+      // Update UI for logged-in user (e.g., show profile, hide login button)
+      if (dom.loginButton) dom.loginButton.style.display = "none";
+      if (dom.logoutButton) dom.logoutButton.style.display = "block";
+      if (dom.userProfileContainer)
+        dom.userProfileContainer.style.display = "flex"; // Or 'block'
+      if (dom.userProfileName)
+        dom.userProfileName.textContent = user.displayName || user.email;
+      if (dom.userProfilePic) {
+        if (user.photoURL) {
+          dom.userProfilePic.src = user.photoURL;
+          dom.userProfilePic.style.display = "block";
+        } else {
+          dom.userProfilePic.style.display = "none"; // Hide if no photoURL
+        }
       }
-      // Attach logout handler
-      const logoutBtn = dropdownMenu.querySelector("#logoutBtn");
-      if (logoutBtn) {
-        logoutBtn.onclick = function () {
-          auth.signOut().then(function () {
-            dropdownMenu.style.display = "none";
-            if (loginBtn) loginBtn.style.display = "inline-block";
-            profilePicContainer.style.display = "none";
-            profilePicContainer.innerHTML = "";
-          });
-        };
-      }
+      closeLoginPopup(); // Close login popup if open
     } else {
-      // User is signed out, show login button and hide profile
-      if (loginBtn) loginBtn.style.display = "inline-block";
-      profilePicContainer.style.display = "none";
-      profilePicContainer.innerHTML = "";
+      // User is signed out.
+      console.log("User is signed out.");
+      state.auth.isUserLoggedIn = false;
+      state.auth.userProfile = null;
+      // Update UI for logged-out user (e.g., show login button, hide profile)
+      if (dom.loginButton) dom.loginButton.style.display = "block";
+      if (dom.logoutButton) dom.logoutButton.style.display = "none";
+      if (dom.userProfileContainer)
+        dom.userProfileContainer.style.display = "none";
+      if (dom.userProfileName) dom.userProfileName.textContent = "";
+      if (dom.userProfilePic) {
+        dom.userProfilePic.src = "";
+        dom.userProfilePic.style.display = "none";
+      }
     }
+    // Potentially trigger other UI updates or logic based on auth state change
+    // For example, re-render parts of the UI that depend on login state.
+    reRenderDynamicContent(); // Example: if some content visibility depends on login
   });
 }
 
 /**
+ * Closes the login popup modal.
+ */
+function closeLoginPopup() {
+  if (dom.loginPopupModal) {
+    dom.loginPopupModal.style.display = "none";
+    console.log("Login popup closed.");
+  }
+}
+
+// Firebase authentication is now handled by auth.js module
+
+// Authentication UI is now handled by auth.js module
+
+/**
  * Shows the login popup modal.
  */
-function showLoginPopup() {
+export function showLoginPopup() {
   const popup = document.getElementById("login-popup");
   if (popup) {
     popup.style.display = "flex";
     popup.style.alignItems = "center"; // Ensure centering property is applied inline
     popup.style.justifyContent = "center"; // Ensure centering property is applied inline
+  }
+}
+
+/**
+ * Shows an in-app notification at the bottom of the screen.
+ * @param {string} message - The message to display.
+ * @param {number} [duration=3000] - How long to display the notification in milliseconds.
+ */
+function showInAppNotification(message, duration = 3000) {
+  const notificationElement = document.getElementById("inAppNotification");
+  if (notificationElement) {
+    notificationElement.textContent = message;
+    notificationElement.classList.add("show");
+
+    // Automatically hide after duration
+    setTimeout(() => {
+      notificationElement.classList.remove("show");
+    }, duration);
   }
 }
 
@@ -327,41 +343,64 @@ function hideLoginPopup() {
  * Handles sign-in with Google using Firebase Auth.
  */
 function handleGoogleSignIn() {
+  const displayNameInput = document.getElementById("displayName");
+  const name = displayNameInput ? displayNameInput.value.trim() : "";
+
+  if (!name) {
+    showAuthMessage(
+      getTranslation("enterYourNamePrompt", "Please enter your name.")
+    );
+    if (displayNameInput) displayNameInput.focus();
+    return;
+  }
   if (!window.firebase || !window.firebase.auth) {
-    alert("Firebase not loaded. Please try again later.");
+    showAuthError("Firebase not loaded. Please try again later.");
     return;
   }
   const provider = new window.firebase.auth.GoogleAuthProvider();
   window.firebase
     .auth()
     .signInWithPopup(provider)
-    .then((result) => {
-      alert("Signed in as: " + result.user.displayName);
-      hideLoginPopup();
+    .then(async (result) => {
+      const user = result.user;
+      if (user) {
+        try {
+          await user.updateProfile({
+            displayName: name,
+          });
+          console.log(
+            "User profile updated with display name for Google sign-in."
+          );
+          // showInAppNotification(
+          //   getTranslation("signInSuccessName", "Signed in as: {name}").replace(
+          //     "{name}",
+          //     name || user.displayName
+          //   )
+          // ); // Removed this notification as it's handled in auth.js
+          hideLoginPopup();
+        } catch (updateError) {
+          console.error(
+            "Error updating profile for Google sign-in: ",
+            updateError
+          );
+          showInAppNotification(
+            getTranslation(
+              "profileUpdateFailed",
+              "Signed in, but failed to update your name: {error}"
+            ).replace("{error}", updateError.message),
+            5000 // Show error for longer
+          );
+          hideLoginPopup(); // Still hide popup on sign-in success even if name update fails
+        }
+      } else {
+        showInAppNotification(
+          getTranslation("signInSuccessGeneric", "Signed in successfully.")
+        );
+        hideLoginPopup();
+      }
     })
     .catch((error) => {
-      alert("Google sign-in failed: " + error.message);
-    });
-}
-
-/**
- * Handles sign-in with Facebook using Firebase Auth.
- */
-function handleFacebookSignIn() {
-  if (!window.firebase || !window.firebase.auth) {
-    alert("Firebase not loaded. Please try again later.");
-    return;
-  }
-  const provider = new window.firebase.auth.FacebookAuthProvider();
-  window.firebase
-    .auth()
-    .signInWithPopup(provider)
-    .then((result) => {
-      alert("Signed in as: " + result.user.displayName);
-      hideLoginPopup();
-    })
-    .catch((error) => {
-      alert("Facebook sign-in failed: " + error.message);
+      showAuthError("Google sign-in failed: " + error.message);
     });
 }
 
@@ -384,11 +423,6 @@ window.addEventListener("DOMContentLoaded", () => {
   const googleBtn = document.getElementById("google-signin-btn");
   if (googleBtn) {
     googleBtn.addEventListener("click", handleGoogleSignIn);
-  }
-  // Facebook sign-in event
-  const facebookBtn = document.getElementById("facebook-signin-btn");
-  if (facebookBtn) {
-    facebookBtn.addEventListener("click", handleFacebookSignIn);
   }
   // Hide popup on outside click
   const popup = document.getElementById("login-popup");

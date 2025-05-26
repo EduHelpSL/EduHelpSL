@@ -4,7 +4,7 @@
   "description": "EduHelp Sri Lanka is a simple, student-friendly educational website designed to help Sri Lankan students easily access school exam papers, textbooks, and learning resources. The site supports both English and Tamil, making it accessible to a wider audience. It is lightweight, fast, and works well on any device, helping students learn and prepare efficiently.",
   "main": "index.html",
   "scripts": {
-    "start": "parcel index.html"
+    "start": "parcel public/index.html"
   },
   "dependencies": {
     "@firebasegen/default-connector": "file:dataconnect-generated/js/default-connector",
@@ -15,10 +15,12 @@
     "date-fns": "^3.6.0",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
-    "firebase": "^11.7.3",
+    "firebase": "^11.8.1",
     "genkit": "^1.8.0",
-    "gh": "^2.8.9",
+    "gh": "^2.0.9",
     "github": "^14.0.0",
+    "googleapis": "^149.0.0",
+    "mcp-sdk": "^0.1.0",
     "patch-package": "^8.0.0",
     "recharts": "^2.15.1"
   },

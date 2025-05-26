@@ -17,7 +17,8 @@
     />
     <link rel="stylesheet" href="css\reset.css" />
     <link rel="stylesheet" href="css\variables.css" />
-    <link rel="stylesheet" href="css\style.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/loading.css" />
     <link rel="stylesheet" href="css\base.css" />
     <link rel="stylesheet" href="css\layout.css" />
     <link rel="stylesheet" href="css\navigation.css" />
@@ -26,7 +27,7 @@
     <link rel="stylesheet" href="css\videos.css" />
     <link rel="stylesheet" href="css\chat.css" />
     <link rel="stylesheet" href="css\scroll.css" />
-    <link rel="icon" href="/assets/media/logo.png" type="image/png" />
+    <link rel="icon" href="assets/media/logo.png" type="image/png" />
   </head>
   <body class="content-loading">
     <header class="header">
@@ -77,23 +78,85 @@
           </button>
         </div>
         <button
-        class="nav-btn login-btn"
-        data-page="login"
-        data-lang-key="navLogin"
-      ></button>
-<!-- Login Popup Modal -->
-<div id="login-popup" class="login-popup-modal" style="display:none;">
-  <div class="login-popup-content">
-    <span class="login-popup-close" id="login-popup-close" tabindex="0" aria-label="Close login popup">&times;</span>
-    <h2>Sign In</h2>
-    <button id="google-signin-btn" class="login-provider-btn google-btn">
-      <i class="fab fa-google"></i> Sign in with Google
-    </button>
-    <button id="facebook-signin-btn" class="login-provider-btn facebook-btn">
-      <i class="fab fa-facebook"></i> Sign in with Facebook
-    </button>
-  </div>
-</div>
+          id="loginBtn"
+          class="nav-btn login-btn"
+          data-page="login"
+          data-lang-key="navLogin"
+        ></button>
+        <!-- Profile picture container will be inserted here by JavaScript -->
+        <!-- Login Popup Modal -->
+        <div id="login-popup" class="login-popup-modal" style="display: none">
+          <div class="login-popup-content">
+            <span
+              class="login-popup-close"
+              id="login-popup-close"
+              tabindex="0"
+              aria-label="Close login popup"
+              >&times;</span
+            >
+            <h2 data-lang-key="loginPopupTitle">Sign In</h2>
+            <div class="login-form">
+              <div class="input-group">
+                <input
+                  type="text"
+                  id="displayName"
+                  placeholder=""
+                  data-lang-key="yourNamePlaceholder"
+                  class="login-input"
+                  aria-label="Your Name"
+                  required
+                />
+                <span class="input-error" id="displayName-error"></span>
+              </div>
+
+              <div class="input-group">
+                <label
+                  for="gradeSelect"
+                  class="grade-label"
+                  data-lang-key="gradeLabel"
+                  >Grade (Optional):</label
+                >
+                <select
+                  id="gradeSelect"
+                  class="login-input grade-select"
+                  aria-label="Select Grade"
+                >
+                  <option value="" data-lang-key="gradeSelectPlaceholder">
+                    Select your grade
+                  </option>
+                  <option value="1">Grade 1</option>
+                  <option value="2">Grade 2</option>
+                  <option value="3">Grade 3</option>
+                  <option value="4">Grade 4</option>
+                  <option value="5">Grade 5</option>
+                  <option value="6">Grade 6</option>
+                  <option value="7">Grade 7</option>
+                  <option value="8">Grade 8</option>
+                  <option value="9">Grade 9</option>
+                  <option value="10">Grade 10</option>
+                  <option value="11">Grade 11</option>
+                  <option value="12">Grade 12</option>
+                  <option value="13">Grade 13</option>
+                </select>
+              </div>
+
+              <button
+                id="google-signin-btn"
+                class="login-provider-btn google-btn"
+                aria-label="Sign in with Google"
+              >
+                <i class="fab fa-google"></i>
+                <span class="btn-text" data-lang-key="signInWithGoogle"
+                  >Sign in with Google</span
+                >
+                <span class="btn-loading" style="display: none">
+                  <i class="fas fa-spinner fa-spin"></i>
+                  <span data-lang-key="signingIn">Signing in...</span>
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </header>
 
@@ -451,6 +514,14 @@
               aria-atomic="true"
             ></div>
           </div>
+          <div
+            id="libraryLoadingIndicator"
+            class="loading-indicator"
+            style="display: none"
+          >
+            <div class="spinner"></div>
+            <p>Loading resources...</p>
+          </div>
           <div class="resource-items" id="library-resource-items"></div>
         </div>
       </section>
@@ -682,6 +753,11 @@
         }
       }
     </script>
+    <!-- In-app Notification -->
+    <div id="inAppNotification" class="in-app-notification"></div>
+
+    <!-- <script src="js/firebase-config.js"></script> -->
+    <script type="module" src="js/resourceFilter.js"></script>
     <script src="js/main.js" type="module"></script>
   </body>
 </html>

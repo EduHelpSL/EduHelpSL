@@ -1,4 +1,4 @@
-// serviceworker.js
+/*// serviceworker.js
 
 // Define a cache name with a version number to manage updates.
 // Increment this version when you update any of the urlsToCache or the SW logic.
@@ -184,3 +184,4 @@ self.addEventListener("fetch", (event) => {
     })
   );
 });
+*/
