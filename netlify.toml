@@ -18,7 +18,7 @@
   node_bundler = "esbuild"
   
   # Include source maps for debugging
-  included_files = ["netlify/functions/**"]
+  included_files = ["netlify/functions/api.js"]
 
 # Redirect rules to route API calls to Netlify Functions
 [[redirects]]
