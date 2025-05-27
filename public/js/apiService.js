@@ -5,7 +5,7 @@
  * This ensures API keys are not exposed in the frontend code
  */
 
-const API_BASE_URL = "http://localhost:3001/api";
+const API_BASE_URL = "/api"; // Adjusted for deployment; assumes Firebase Hosting rewrites /api to your backend
 
 /**
  * Cache for API keys to avoid multiple requests

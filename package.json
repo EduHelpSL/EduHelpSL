@@ -4,7 +4,16 @@
   "description": "EduHelp Sri Lanka is a simple, student-friendly educational website designed to help Sri Lankan students easily access school exam papers, textbooks, and learning resources. The site supports both English and Tamil, making it accessible to a wider audience. It is lightweight, fast, and works well on any device, helping students learn and prepare efficiently.",
   "main": "index.html",
   "scripts": {
-    "start": "parcel public/index.html"
+    "start": "parcel public/index.html",
+    "test": "node test-migration.js",
+    "test:local": "node test-migration.js http://localhost:8888",
+    "test:prod": "node test-migration.js",
+    "netlify:dev": "netlify dev",
+    "netlify:deploy": "node deploy-netlify.js",
+    "netlify:build": "cd netlify/functions && npm install",
+    "dev": "netlify dev",
+    "deploy:backend": "netlify deploy --prod",
+    "deploy:frontend": "firebase deploy --only hosting"
   },
   "dependencies": {
     "@firebasegen/default-connector": "file:dataconnect-generated/js/default-connector",
@@ -27,6 +36,7 @@
   "devDependencies": {
     "@types/node": "^20",
     "genkit-cli": "^1.8.0",
-    "serve": "^14.2.4"
+    "serve": "^14.2.4",
+    "netlify-cli": "^17.0.0"
   }
 }

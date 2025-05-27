@@ -1,19 +1,29 @@
 {
-  "functions": {
-    "source": "backend/functions"
-  },
   "hosting": {
     "public": "public",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [
       {
         "source": "**",
         "destination": "/index.html"
+      },
+      {
+        "source": "/api/**",
+        "function": "backend"
       }
     ]
+  },
+  "functions": {
+    "source": "functions",
+    "codebase": "default",
+    "gen": 1,
+    "ignore": [
+      "node_modules",
+      ".git",
+      "firebase-debug.log",
+      "firebase-debug.*.log",
+      "*.local"
+    ],
+    "predeploy": ["npm --prefix \"$RESOURCE_DIR\" run lint"]
   }
 }

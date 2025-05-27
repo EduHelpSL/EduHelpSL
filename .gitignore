@@ -48,3 +48,5 @@ firestore-debug.log
 # backend
 /backend
 backend
+# Local Netlify folder
+.netlify

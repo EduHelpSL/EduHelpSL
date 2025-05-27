@@ -1,0 +1,50 @@
+# Netlify configuration file for EduHelpSL backend migration
+# This configuration sets up Netlify Functions to handle API requests
+# while keeping the frontend hosted on Firebase
+
+[build]
+  # Build settings (not needed since frontend stays on Firebase)
+  publish = "public"
+  command = "echo 'Frontend hosted on Firebase, backend on Netlify Functions'"
+
+[functions]
+  # Directory containing Netlify Functions
+  directory = "netlify/functions"
+  
+  # External Node.js modules that should not be bundled
+  external_node_modules = ["express", "cors", "serverless-http"]
+  
+  # Use esbuild for faster bundling
+  node_bundler = "esbuild"
+  
+  # Include source maps for debugging
+  included_files = ["netlify/functions/**"]
+
+# Redirect rules to route API calls to Netlify Functions
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/api/:splat"
+  status = 200
+  force = true
+
+# Handle CORS preflight requests
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/api/:splat"
+  status = 200
+  force = true
+  headers = {Access-Control-Allow-Origin = "*"}
+
+# Fallback for any other API routes
+[[redirects]]
+  from = "/api"
+  to = "/.netlify/functions/api"
+  status = 200
+
+# Environment variables (configure these in Netlify dashboard)
+# GEMINI_API_KEY_1 = "your_gemini_key_1"
+# GEMINI_API_KEY_2 = "your_gemini_key_2"
+# GEMINI_API_KEY_3 = "your_gemini_key_3"
+# GDRIVE_API_KEY = "your_gdrive_api_key"
+# GDRIVE_FOLDER_ID = "your_gdrive_folder_id"
+# NODE_ENV = "production"
