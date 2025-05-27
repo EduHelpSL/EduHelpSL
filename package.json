@@ -1,6 +1,6 @@
 {
   "name": "eduhelp-sri-lanka",
-  "version": "1.0",
+  "version": "1.0.0",
   "description": "EduHelp Sri Lanka is a simple, student-friendly educational website designed to help Sri Lankan students easily access school exam papers, textbooks, and learning resources. The site supports both English and Tamil, making it accessible to a wider audience. It is lightweight, fast, and works well on any device, helping students learn and prepare efficiently.",
   "main": "index.html",
   "scripts": {
