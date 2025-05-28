@@ -53,11 +53,11 @@ function main() {
     log("\n📋 Checking required files...", "yellow");
     const requiredFiles = [
       {
-        path: "netlify/functions/api.js",
+        path: "backend/functions/api.js",
         desc: "Netlify Function entry point",
       },
       {
-        path: "netlify/functions/package.json",
+        path: "backend/functions/package.json",
         desc: "Functions package.json",
       },
       { path: "netlify.toml", desc: "Netlify configuration" },
@@ -78,7 +78,7 @@ function main() {
 
     // Install dependencies
     log("\n📦 Installing Netlify Functions dependencies...", "yellow");
-    process.chdir("netlify/functions");
+    process.chdir("backend/functions");
     runCommand("npm install", "Installing dependencies");
     process.chdir("../..");
 

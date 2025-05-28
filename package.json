@@ -10,7 +10,7 @@
     "test:prod": "node test-migration.js",
     "netlify:dev": "netlify dev",
     "netlify:deploy": "node deploy-netlify.js",
-    "netlify:build": "cd netlify/functions && npm install",
+    "netlify:build": "cd backend/functions && npm install",
     "dev": "netlify dev",
     "deploy:backend": "netlify deploy --prod",
     "deploy:frontend": "firebase deploy --only hosting"

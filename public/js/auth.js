@@ -16,6 +16,10 @@ import {
   getAuthErrorMessage,
 } from "./firebase.js";
 import { navigateToPage } from "./navigation.js"; // Import navigateToPage
+import { verifyRecaptchaToken } from "./apiService.js"; // Import the new service
+
+// TODO: Replace YOUR_RECAPTCHA_SITE_KEY with your actual ReCaptcha v3 site key
+const RECAPTCHA_SITE_KEY = "6Lee90orAAAAAA_td1JBykT3ufaSLLuo_cgmPjjB";
 
 // Authentication state
 let authInitialized = false;
@@ -354,40 +358,109 @@ function hideLoginPopup() {
  * Handle Google sign-in
  */
 async function handleGoogleSignIn() {
-  // Clear any previous error messages first
-  clearAuthMessages();
+  if (!dom.googleSignInButton) return;
+
+  showLoadingState(dom.googleSignInButton, true);
+  clearAuthError(); // Clear previous errors
+
+  const displayNameInput = document.getElementById("displayName");
+  const gradeSelect = document.getElementById("gradeSelect");
+  const recaptchaTokenInput = document.getElementById("recaptcha-token");
+
+  if (!displayNameInput || !gradeSelect || !recaptchaTokenInput) {
+    console.error("Required form elements not found for sign-in.");
+    showAuthError(
+      getTranslation(
+        "formElementsMissing",
+        "Required form elements are missing."
+      )
+    );
+    showLoadingState(dom.googleSignInButton, false);
+    return;
+  }
+
+  const displayName = displayNameInput.value.trim();
+  const grade = gradeSelect.value;
+
+  if (!displayName) {
+    showAuthError(
+      getTranslation("nameRequiredError", "Please enter your name."),
+      "displayName-error"
+    );
+    showLoadingState(dom.googleSignInButton, false);
+    return;
+  }
 
   try {
-    // Get user input
-    const displayName = dom.displayNameInput?.value?.trim();
-    const grade = dom.gradeSelect?.value?.trim();
+    // Execute reCAPTCHA v3
+    grecaptcha.ready(async function () {
+      try {
+        const token = await grecaptcha.execute(RECAPTCHA_SITE_KEY, {
+          action: "login",
+        });
+        recaptchaTokenInput.value = token;
+        console.log("reCAPTCHA token:", token);
 
-    // Validate input
-    if (!displayName) {
-      showAuthError(
-        getTranslation("enterNameRequired", "Please enter your name.")
-      );
-      if (dom.displayNameInput) dom.displayNameInput.focus();
-      return;
-    }
+        // Verify the token with the backend
+        const verificationResult = await verifyRecaptchaToken(token);
+        console.log(
+          "Backend reCAPTCHA verification result:",
+          verificationResult
+        );
 
-    // Show loading state
-    setSignInButtonLoading(true);
+        if (!verificationResult.success) {
+          // Handle verification failure (e.g., show an error, log it)
+          let errorMessage = getTranslation(
+            "recaptchaVerificationFailed",
+            "ReCaptcha verification failed. Please try again."
+          );
+          if (
+            verificationResult["error-codes"] &&
+            verificationResult["error-codes"].length > 0
+          ) {
+            errorMessage += ` (Codes: ${verificationResult["error-codes"].join(
+              ", "
+            )})`;
+          }
+          console.error(
+            "Backend ReCaptcha verification failed:",
+            verificationResult
+          );
+          showAuthError(errorMessage);
+          showLoadingState(dom.googleSignInButton, false);
+          return;
+        }
 
-    // Set flag for login notification
-    sessionStorage.setItem("justLoggedIn", "true");
+        // Optional: Check score if needed (e.g., if verificationResult.score < 0.5) {
+        //   console.warn(`Low reCAPTCHA score: ${verificationResult.score}`);
+        //   showAuthError(getTranslation("recaptchaLowScore", "Security check score too low. Please try again."));
+        //   showLoadingState(dom.googleSignInButton, false);
+        //   return;
+        // }
 
-    // Attempt sign-in
-    await signInWithGoogle(displayName, grade);
-
-    // Success is handled by auth state observer, which will also handle redirection
-    // and clear messages on successful login or hide the popup.
+        // Proceed with Google Sign-In only if ReCaptcha is successful
+        await signInWithGoogle(displayName, grade); // Removed token from here as backend handles it via Firebase Auth
+        sessionStorage.setItem("justLoggedIn", "true");
+        // Auth state change will handle UI updates and success message
+      } catch (error) {
+        console.error("reCAPTCHA execution or Sign-in failed:", error);
+        const errorMessage = getAuthErrorMessage(
+          error.code,
+          getTranslation("signInFailed", "Sign-in failed. Please try again.")
+        );
+        showAuthError(errorMessage);
+        showLoadingState(dom.googleSignInButton, false);
+      }
+    });
   } catch (error) {
-    console.error("Sign-in error:", error);
-    // Display a generic error or a specific one from Firebase
-    showAuthError(getAuthErrorMessage(error));
-  } finally {
-    setSignInButtonLoading(false);
+    // This catch is for errors before grecaptcha.ready or grecaptcha.execute is called
+    console.error("Google Sign-In process error:", error);
+    const errorMessage = getAuthErrorMessage(
+      error.code,
+      getTranslation("signInFailed", "Sign-in failed. Please try again.")
+    );
+    showAuthError(errorMessage);
+    showLoadingState(dom.googleSignInButton, false);
   }
 }
 
@@ -395,18 +468,17 @@ async function handleGoogleSignIn() {
  * Handle sign out
  */
 async function handleSignOut() {
+  if (!isUserAuthenticated()) return;
+
   try {
-    setSignOutButtonLoading(true);
-    sessionStorage.setItem("justLoggedOut", "true"); // Set flag for logout notification
     await signOut();
-    // Success is handled by auth state observer
+    sessionStorage.setItem("justLoggedOut", "true");
+    // Auth state change will handle UI updates and success message
   } catch (error) {
-    console.error("Sign-out error:", error);
+    console.error("Sign out failed:", error);
     showAuthError(
-      getTranslation("signOutError", "Failed to sign out. Please try again.")
+      getTranslation("signOutError", "Sign out failed. Please try again.")
     );
-  } finally {
-    setSignOutButtonLoading(false);
   }
 }
 
@@ -632,4 +704,160 @@ export function cleanupAuth() {
     authStateUnsubscribe = null;
   }
   authInitialized = false;
+}
+
+/**
+ * Setup login button
+ */
+function setupLoginButton() {
+  const loginBtn = document.getElementById("loginBtn");
+  const loginPopup = document.getElementById("login-popup");
+  const closeBtn = document.getElementById("login-popup-close");
+  const googleSignInButton = document.getElementById("google-signin-btn");
+
+  if (loginBtn) {
+    loginBtn.addEventListener("click", () => {
+      if (loginPopup) loginPopup.style.display = "block";
+    });
+  }
+
+  if (closeBtn) {
+    closeBtn.addEventListener("click", closeLoginPopup);
+    closeBtn.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        closeLoginPopup();
+      }
+    });
+  }
+
+  if (googleSignInButton) {
+    googleSignInButton.addEventListener("click", handleSignIn);
+  }
+
+  // Close popup when clicking outside of it
+  window.addEventListener("click", (event) => {
+    if (event.target === loginPopup) {
+      closeLoginPopup();
+    }
+  });
+}
+
+async function handleSignIn(event) {
+  event.preventDefault(); // Prevent default form submission if any
+  const displayNameInput = document.getElementById("displayName");
+  const displayName = displayNameInput.value.trim();
+  const grade = document.getElementById("gradeSelect").value;
+  const displayNameError = document.getElementById("displayName-error");
+
+  if (!displayName) {
+    displayNameError.textContent = translate("displayNameRequired");
+    displayNameInput.focus();
+    return;
+  }
+  displayNameError.textContent = ""; // Clear any previous error
+
+  // Show loading state on the button
+  const googleSignInButton = document.getElementById("google-signin-btn");
+  const btnText = googleSignInButton.querySelector(".btn-text");
+  const btnLoading = googleSignInButton.querySelector(".btn-loading");
+
+  btnText.style.display = "none";
+  btnLoading.style.display = "inline-block";
+  googleSignInButton.disabled = true;
+
+  try {
+    // Execute reCAPTCHA
+    if (
+      typeof grecaptcha === "undefined" ||
+      typeof grecaptcha.enterprise === "undefined"
+    ) {
+      console.error("reCAPTCHA script not loaded.");
+      throw new Error(translate("recaptchaError"));
+    }
+
+    await grecaptcha.enterprise.ready(async () => {
+      try {
+        const token = await grecaptcha.enterprise.execute(
+          "6Lee90orAAAAAA_td1JBykT3ufaSLLuo_cgmPjjB",
+          { action: "LOGIN" }
+        );
+        document.getElementById("recaptcha-token").value = token;
+
+        // Verify the token with the backend
+        const verificationResult = await verifyRecaptchaToken(token);
+
+        if (!verificationResult.success) {
+          console.error(
+            "reCAPTCHA verification failed:",
+            verificationResult.message || verificationResult.error
+          );
+          // Potentially show a user-facing error message
+          alert(translate("recaptchaVerificationFailed"));
+          throw new Error(translate("recaptchaVerificationFailed"));
+        }
+
+        // Check the reCAPTCHA score (optional, but recommended)
+        // Adjust the threshold as needed for your application's security requirements.
+        // A score of 0.0 is very likely a bot, 1.0 is very likely a human.
+        // Scores between 0.3 and 0.7 are common for legitimate users.
+        if (verificationResult.score < 0.5) {
+          // Example threshold
+          console.warn(
+            `Low reCAPTCHA score: ${verificationResult.score}. Action: ${verificationResult.action}`
+          );
+          // You might want to implement additional checks or block the login
+          alert(translate("lowRecaptchaScore"));
+          throw new Error(translate("lowRecaptchaScore"));
+        }
+
+        console.log(
+          "reCAPTCHA verification successful, proceeding with sign-in."
+        );
+
+        const provider = new firebase.auth.GoogleAuthProvider();
+        const result = await firebase.auth().signInWithPopup(provider);
+        const user = result.user;
+
+        if (user) {
+          // Store display name and grade in Firestore or Realtime Database
+          // For simplicity, we'll store it in localStorage for now, but a backend solution is better.
+          localStorage.setItem("displayName", displayName);
+          localStorage.setItem("grade", grade);
+          updateLoginUI(user, displayName, grade);
+          closeLoginPopup();
+          sessionStorage.setItem("isLoggedIn", "true");
+          showToast(translate("loginSuccess"));
+        }
+      } catch (error) {
+        console.error(
+          "Error during reCAPTCHA execution or sign-in popup:",
+          error
+        );
+        let errorMessage = translate("loginError");
+        if (error.code === "auth/popup-closed-by-user") {
+          errorMessage = translate("loginCancelled");
+        } else if (
+          error.message === translate("recaptchaVerificationFailed") ||
+          error.message === translate("lowRecaptchaScore")
+        ) {
+          errorMessage = error.message; // Use the specific reCAPTCHA error
+        } else if (error.message === translate("recaptchaError")) {
+          errorMessage = error.message;
+        }
+        showToast(errorMessage, "error");
+      } finally {
+        // Hide loading state
+        btnText.style.display = "inline-block";
+        btnLoading.style.display = "none";
+        googleSignInButton.disabled = false;
+      }
+    });
+  } catch (error) {
+    console.error("Error during sign-in process:", error);
+    showToast(translate("loginError"), "error");
+    // Hide loading state in case of early failure before grecaptcha.ready
+    btnText.style.display = "inline-block";
+    btnLoading.style.display = "none";
+    googleSignInButton.disabled = false;
+  }
 }

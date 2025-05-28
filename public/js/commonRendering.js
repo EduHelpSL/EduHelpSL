@@ -58,128 +58,100 @@ export function populateGradeGrid(gridElement) {
 }
 
 /**
- * Renders a subject grid based on the selected grade.
+ * Renders a subject grid based on the selected grade and active section (resources/videos).
  * @param {HTMLElement} gridElement The DOM element to render the subjects into.
- * @param {string|number} grade The selected grade (e.g., 'grade1').
- * @param {string} [resourceType] The selected resource type ('books', 'papers', etc.) - optional, for Library.
+ * @param {string|number} grade The selected grade (e.g., '1', '10').
  */
-export function renderSubjectGrid(gridElement, grade, resourceType) {
-  if (!gridElement || !grade) return;
+export function renderSubjectGrid(gridElement, grade) {
+  if (!gridElement || grade === undefined || grade === null) {
+    console.error("renderSubjectGrid: Invalid gridElement or grade provided.");
+    return;
+  }
+
   gridElement.innerHTML = ""; // Clear existing content
-  const gradeData = getSubjectDataForGrade(grade); // Get subject data from config
   const t = state.translations; // Get current translations
 
-  // Reset class and add layout class if needed based on grade data
-  gridElement.className = "subject-grid";
-  if (gradeData.layout === "vertical") {
-    gridElement.classList.add("subject-grid-vertical");
+  // Determine active section (resources or videos)
+  let activeSection = "resources"; // Default to resources
+  if (dom.videosPage && dom.videosPage.classList.contains("active")) {
+    activeSection = "videos";
+  } else if (dom.libraryPage && dom.libraryPage.classList.contains("active")) {
+    activeSection = "resources";
+  }
+  // console.log(`Rendering subject grid for section: ${activeSection}, grade: ${grade}`);
+
+  const gradeData = getSubjectDataForGrade(grade, activeSection);
+  // console.log('Grade Data for rendering:', gradeData);
+
+  if (!gradeData || (!gradeData.subjects && !gradeData.categories)) {
+    console.warn(
+      `No subject data found for grade ${grade} in section ${activeSection}.`
+    );
+    const noRes = document.createElement("p");
+    noRes.className = "no-results";
+    noRes.dataset.langKey = "noSubjectsFound";
+    noRes.textContent =
+      t["noSubjectsFound"] || "No subjects found for this grade.";
+    gridElement.appendChild(noRes);
+    return;
+  }
+
+  gridElement.className = "subject-grid"; // Reset base class
+  if (gradeData.layout) {
+    gridElement.classList.add(`subject-grid-${gradeData.layout}`); // e.g., subject-grid-list, subject-grid-categorized-grid
   }
 
   const frag = document.createDocumentFragment();
-  let hasSubjects = false;
-  let subjectsToRender = new Set(); // Use a Set to automatically handle uniqueness
-  let layout = gradeData.layout; // Default layout from getSubjectDataForGrade
+  let hasSubjectsRendered = false;
 
-  // Determine which subjects to render based on whether a resource type is provided
-  if (resourceType) {
-    // Library section: Filter subjects based on grade AND resource type
-    const resourcesOfType = config.fakeLibraryData[grade]?.[resourceType] || []; // Use optional chaining
-    // Extract unique subjects from the resources of the selected type
-    resourcesOfType.forEach((item) => {
-      if (item.subject) subjectsToRender.add(item.subject);
-    });
-
-    // If no subjects found in the resources, try to get subjects from state.driveResources
-    if (subjectsToRender.size === 0 && state.driveResources) {
-      const gradeResources = state.driveResources.filter(
-        (item) => item.grade === grade || item.grade === `grade${grade}`
-      );
-      const typeResources = gradeResources.filter(
-        (item) => item.type === resourceType
-      );
-      typeResources.forEach((item) => {
-        if (item.subject) subjectsToRender.add(item.subject);
-      });
-    }
-  } else {
-    // Videos section or old logic: Render all subjects for the grade from getSubjectDataForGrade
-    // This part relies on the structure of getSubjectDataForGrade which might include categories.
-    console.log(
-      `Rendering all subjects for Grade ${grade} (no resource type filter).`
-    );
-  }
   // Helper function to create and append a subject button
-  const renderBtn = (sk) => {
-    hasSubjects = true;
+  const createSubjectButton = (subject) => {
     const btn = document.createElement("button");
     btn.className = "subject-btn";
-    // Use sk.id for dataset.subject if available, otherwise sk (for backward compatibility or simple strings)
-    btn.dataset.subject = typeof sk === "object" && sk.id ? sk.id : sk;
-
-    // Use sk.name for display logic if sk is an object, otherwise sk itself
-    const subjectName = typeof sk === "object" && sk.name ? sk.name : sk;
-
-    const lk = `subject${
-      subjectName.charAt(0).toUpperCase() +
-      subjectName.slice(1).toLowerCase().replace(/\s+/g, "")
-    }`;
-    btn.dataset.langKey = lk; // Add lang key
-
-    // Fallback text: split camelCase (if any) or use subjectName directly, then capitalize first letter
-    const fallbackText = subjectName
-      .replace(/([A-Z])/g, " $1") // Add space before caps for camelCase
-      .replace(/^./, (s) => s.toUpperCase()); // Capitalize first letter
-
-    btn.textContent = t[lk] || fallbackText; // Use translation or fallback
+    btn.dataset.subject = subject.id;
+    btn.dataset.langKey = subject.langKey;
+    btn.textContent = t[subject.langKey] || subject.name; // Use translation or fallback name
     frag.appendChild(btn);
+    hasSubjectsRendered = true;
   };
 
-  // Render the determined list of subjects
-  if (subjectsToRender.size > 0) {
-    // Sort and render the unique subjects
-    Array.from(subjectsToRender).sort().forEach(renderBtn);
-    hasSubjects = true;
-  } else if (!resourceType) {
-    // If no resourceType is provided (likely Videos section), use the old rendering logic
-    subjectsToRender = new Set(); // Clear set if falling back
-    // based on getSubjectDataForGrade which might have categories.
-    console.log(
-      "Using getSubjectDataForGrade structure for rendering subjects."
-    );
-    if (gradeData.categories) {
-      Object.values(gradeData.categories).forEach((cat) => {
-        if (cat.subjects && cat.subjects.length > 0) {
-          // Add category header
-          const hdr = document.createElement("div");
-          hdr.className = "subject-category-header";
-          hdr.dataset.langKey = cat.titleKey; // Add lang key for category title
-          hdr.textContent = t[cat.titleKey] || cat.titleKey; // Use translation or key
-          frag.appendChild(hdr);
-          // Add buttons for subjects in this category
-          cat.subjects.forEach(renderBtn);
+  if (gradeData.layout === "list" || gradeData.layout === "grid") {
+    if (gradeData.subjects && gradeData.subjects.length > 0) {
+      gradeData.subjects.forEach(createSubjectButton);
+    } else {
+      // console.log(`No direct subjects for grade ${grade}, layout ${gradeData.layout}`);
+    }
+  } else if (gradeData.layout === "categorized-grid") {
+    if (gradeData.categories && gradeData.categories.length > 0) {
+      gradeData.categories.forEach((category) => {
+        if (category.subjects && category.subjects.length > 0) {
+          const categoryHeader = document.createElement("h3");
+          categoryHeader.className = "subject-category-header";
+          categoryHeader.dataset.langKey = category.titleKey;
+          categoryHeader.textContent =
+            t[category.titleKey] ||
+            category.titleKey.replace(/([A-Z])/g, " $1").trim(); // Fallback with spacing
+          frag.appendChild(categoryHeader);
+          category.subjects.forEach(createSubjectButton);
         }
       });
-      hasSubjects = frag.children.length > 0; // Check if any subjects were added via categories
-    } else if (gradeData.subjects && gradeData.subjects.length > 0) {
-      // Add buttons for subjects in a simple list structure
-      gradeData.subjects.forEach(renderBtn);
-      hasSubjects = true; // Subjects were added
+    } else {
+      // console.log(`No categories or subjects within categories for grade ${grade}`);
     }
   }
 
-  // Re-check hasSubjects if rendering from subjectsToRender array
-  if (resourceType && subjectsToRender.length > 0) hasSubjects = true;
-  // Display a message if no subjects are found for the grade
-  if (!hasSubjects) {
+  if (!hasSubjectsRendered) {
+    // console.warn(`No subjects rendered for grade ${grade} in section ${activeSection} after processing layout.`);
     const noRes = document.createElement("p");
     noRes.className = "no-results";
+    noRes.dataset.langKey = "noSubjectsFound";
     noRes.textContent =
       t["noSubjectsFound"] || "No subjects found for this grade.";
-    frag.appendChild(noRes);
+    frag.appendChild(noRes); // Append to frag, then frag to gridElement
   }
 
   gridElement.appendChild(frag);
-  console.log(`Subject grid rendered for Grade ${grade}.`);
+  // console.log(`Subject grid rendered for Grade ${grade}, Section: ${activeSection}. Layout: ${gradeData.layout}`);
 }
 
 /**

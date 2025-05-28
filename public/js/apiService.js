@@ -5,7 +5,7 @@
  * This ensures API keys are not exposed in the frontend code
  */
 
-const API_BASE_URL = "/api"; // Adjusted for deployment; assumes Firebase Hosting rewrites /api to your backend
+const API_BASE_URL = "https://eduhelpsl.netlify.app/.netlify/functions/api"; // TODO: Replace <YOUR_NETLIFY_SITE_NAME> with your actual Netlify site name or your custom domain pointing to the Netlify functions.
 
 /**
  * Cache for API keys to avoid multiple requests
@@ -137,4 +137,48 @@ export function clearApiKeysCache() {
   apiKeysCache = null;
   cacheTimestamp = null;
   console.log("API keys cache cleared");
+}
+
+/**
+ * Verifies a ReCaptcha v3 token with the backend.
+ * @param {string} token - The ReCaptcha token to verify.
+ * @returns {Promise<object>} The verification result from the backend.
+ * @throws {Error} If verification fails or an error occurs.
+ */
+export async function verifyRecaptchaToken(token) {
+  try {
+    const response = await fetch(`${API_BASE_URL}/verify-recaptcha`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "User-Agent": "EduHelpSL-Frontend/1.0",
+      },
+      body: JSON.stringify({ token }),
+      credentials: "include", // Important if your Netlify function needs cookies/auth
+    });
+
+    if (!response.ok) {
+      const errorData = await response
+        .json()
+        .catch(() => ({
+          message: "Unknown error during ReCaptcha verification",
+        }));
+      console.error(
+        `ReCaptcha verification request failed: ${response.status} ${response.statusText}`,
+        errorData
+      );
+      throw new Error(
+        errorData.error ||
+          `ReCaptcha verification failed: ${response.statusText}`
+      );
+    }
+
+    const result = await response.json();
+    console.log("ReCaptcha token verification result:", result);
+    return result;
+  } catch (error) {
+    console.error("Error verifying ReCaptcha token:", error);
+    // Re-throw the error so the calling function can handle it
+    throw error;
+  }
 }

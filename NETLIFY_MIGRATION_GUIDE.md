@@ -73,15 +73,20 @@ Update your frontend API service to point to the Netlify Functions:
 
 ```javascript
 // In public/js/apiService.js, update the API_BASE_URL
-const API_BASE_URL = "https://your-netlify-site.netlify.app/api";
+// Replace <YOUR_NETLIFY_SITE_NAME> with your actual Netlify site name or your custom domain pointing to the Netlify functions.
+const API_BASE_URL =
+  "https://<YOUR_NETLIFY_SITE_NAME>.netlify.app/.netlify/functions/api";
 
-// For local development, you can use:
-// const API_BASE_URL = "http://localhost:8888/api";
+// For local development with Netlify Dev (which proxies /api to your functions):
+// const API_BASE_URL = "/api";
+// OR if you are directly calling the function endpoint during local dev:
+// const API_BASE_URL = "http://localhost:8888/.netlify/functions/api";
 ```
 
 ## 🌐 Deployment
 
 ### Automated Deployment
+
 ```bash
 # Use the automated deployment script
 npm run netlify:deploy
@@ -108,6 +113,7 @@ npm run deploy:frontend
    - Functions directory: `netlify/functions`
 
 3. **Deploy:**
+
    ```bash
    # Install Netlify CLI globally (if not already installed)
    npm install -g netlify-cli
@@ -125,7 +131,9 @@ npm run deploy:frontend
 
    ```javascript
    // Replace Firebase Functions URL with Netlify Functions URL
-   const API_BASE_URL = "https://your-netlify-site.netlify.app/api";
+   // Replace <YOUR_NETLIFY_SITE_NAME> with your actual Netlify site name or your custom domain pointing to the Netlify functions.
+   const API_BASE_URL =
+     "https://<YOUR_NETLIFY_SITE_NAME>.netlify.app/.netlify/functions/api";
    ```
 
 2. **Deploy updated frontend to Firebase:**

@@ -90,6 +90,9 @@ async function initializeEduHelpApp() {
     await switchLanguage(initialLang);
     console.log(`Initial language loaded: ${initialLang}`);
     // Once translations are loaded, make the content visible
+    if (dom.globalLoader) {
+      dom.globalLoader.style.display = "none"; // Hide the new loader
+    }
     document.body.classList.remove("content-loading");
     document.body.classList.add("content-ready");
     console.log("Content revealed after language load.");

@@ -26,6 +26,7 @@ export function cacheDomElements() {
     body: document.body,
     header: document.querySelector(".header"),
     pages: document.querySelectorAll(".page"),
+    globalLoader: document.getElementById('global-loader'), // Added global loader
     // Updated to select all elements intended for page navigation via data-page attribute
     navButtons: document.querySelectorAll("[data-page]"),
     langButtons: document.querySelectorAll(".lang-btn"),
