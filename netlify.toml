@@ -17,6 +17,9 @@
   # Include source maps for debugging
   included_files = ["functions/api.js"]
 
+[[plugins]]
+  package = "@netlify/plugin-functions-install-core"
+
 # Redirect rules to route API calls to Netlify Functions
 [[redirects]]
   from = "/api/*"
