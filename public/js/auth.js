@@ -16,10 +16,6 @@ import {
   getAuthErrorMessage,
 } from "./firebase.js";
 import { navigateToPage } from "./navigation.js"; // Import navigateToPage
-import { verifyRecaptchaToken } from "./apiService.js"; // Import the new service
-
-// TODO: Replace YOUR_RECAPTCHA_SITE_KEY with your actual ReCaptcha v3 site key
-const RECAPTCHA_SITE_KEY = "6Lee90orAAAAAA_td1JBykT3ufaSLLuo_cgmPjjB";
 
 // Authentication state
 let authInitialized = false;
@@ -365,9 +361,7 @@ async function handleGoogleSignIn() {
 
   const displayNameInput = document.getElementById("displayName");
   const gradeSelect = document.getElementById("gradeSelect");
-  const recaptchaTokenInput = document.getElementById("recaptcha-token");
-
-  if (!displayNameInput || !gradeSelect || !recaptchaTokenInput) {
+  if (!displayNameInput || !gradeSelect) {
     console.error("Required form elements not found for sign-in.");
     showAuthError(
       getTranslation(
@@ -392,68 +386,10 @@ async function handleGoogleSignIn() {
   }
 
   try {
-    // Execute reCAPTCHA v3
-    grecaptcha.ready(async function () {
-      try {
-        const token = await grecaptcha.execute(RECAPTCHA_SITE_KEY, {
-          action: "login",
-        });
-        recaptchaTokenInput.value = token;
-        console.log("reCAPTCHA token:", token);
-
-        // Verify the token with the backend
-        const verificationResult = await verifyRecaptchaToken(token);
-        console.log(
-          "Backend reCAPTCHA verification result:",
-          verificationResult
-        );
-
-        if (!verificationResult.success) {
-          // Handle verification failure (e.g., show an error, log it)
-          let errorMessage = getTranslation(
-            "recaptchaVerificationFailed",
-            "ReCaptcha verification failed. Please try again."
-          );
-          if (
-            verificationResult["error-codes"] &&
-            verificationResult["error-codes"].length > 0
-          ) {
-            errorMessage += ` (Codes: ${verificationResult["error-codes"].join(
-              ", "
-            )})`;
-          }
-          console.error(
-            "Backend ReCaptcha verification failed:",
-            verificationResult
-          );
-          showAuthError(errorMessage);
-          showLoadingState(dom.googleSignInButton, false);
-          return;
-        }
-
-        // Optional: Check score if needed (e.g., if verificationResult.score < 0.5) {
-        //   console.warn(`Low reCAPTCHA score: ${verificationResult.score}`);
-        //   showAuthError(getTranslation("recaptchaLowScore", "Security check score too low. Please try again."));
-        //   showLoadingState(dom.googleSignInButton, false);
-        //   return;
-        // }
-
-        // Proceed with Google Sign-In only if ReCaptcha is successful
-        await signInWithGoogle(displayName, grade); // Removed token from here as backend handles it via Firebase Auth
-        sessionStorage.setItem("justLoggedIn", "true");
-        // Auth state change will handle UI updates and success message
-      } catch (error) {
-        console.error("reCAPTCHA execution or Sign-in failed:", error);
-        const errorMessage = getAuthErrorMessage(
-          error.code,
-          getTranslation("signInFailed", "Sign-in failed. Please try again.")
-        );
-        showAuthError(errorMessage);
-        showLoadingState(dom.googleSignInButton, false);
-      }
-    });
+    await signInWithGoogle(displayName, grade);
+    sessionStorage.setItem("justLoggedIn", "true");
+    // Auth state change will handle UI updates and success message
   } catch (error) {
-    // This catch is for errors before grecaptcha.ready or grecaptcha.execute is called
     console.error("Google Sign-In process error:", error);
     const errorMessage = getAuthErrorMessage(
       error.code,
@@ -766,96 +702,29 @@ async function handleSignIn(event) {
   googleSignInButton.disabled = true;
 
   try {
-    // Execute reCAPTCHA
-    if (
-      typeof grecaptcha === "undefined" ||
-      typeof grecaptcha.enterprise === "undefined"
-    ) {
-      console.error("reCAPTCHA script not loaded.");
-      throw new Error(translate("recaptchaError"));
+    const provider = new firebase.auth.GoogleAuthProvider();
+    const result = await firebase.auth().signInWithPopup(provider);
+    const user = result.user;
+
+    if (user) {
+      // Store display name and grade in Firestore or Realtime Database
+      // For simplicity, we'll store it in localStorage for now, but a backend solution is better.
+      localStorage.setItem("displayName", displayName);
+      localStorage.setItem("grade", grade);
+      updateLoginUI(user, displayName, grade);
+      closeLoginPopup();
+      sessionStorage.setItem("isLoggedIn", "true");
+      showToast(translate("loginSuccess"));
     }
-
-    await grecaptcha.enterprise.ready(async () => {
-      try {
-        const token = await grecaptcha.enterprise.execute(
-          "6Lee90orAAAAAA_td1JBykT3ufaSLLuo_cgmPjjB",
-          { action: "LOGIN" }
-        );
-        document.getElementById("recaptcha-token").value = token;
-
-        // Verify the token with the backend
-        const verificationResult = await verifyRecaptchaToken(token);
-
-        if (!verificationResult.success) {
-          console.error(
-            "reCAPTCHA verification failed:",
-            verificationResult.message || verificationResult.error
-          );
-          // Potentially show a user-facing error message
-          alert(translate("recaptchaVerificationFailed"));
-          throw new Error(translate("recaptchaVerificationFailed"));
-        }
-
-        // Check the reCAPTCHA score (optional, but recommended)
-        // Adjust the threshold as needed for your application's security requirements.
-        // A score of 0.0 is very likely a bot, 1.0 is very likely a human.
-        // Scores between 0.3 and 0.7 are common for legitimate users.
-        if (verificationResult.score < 0.5) {
-          // Example threshold
-          console.warn(
-            `Low reCAPTCHA score: ${verificationResult.score}. Action: ${verificationResult.action}`
-          );
-          // You might want to implement additional checks or block the login
-          alert(translate("lowRecaptchaScore"));
-          throw new Error(translate("lowRecaptchaScore"));
-        }
-
-        console.log(
-          "reCAPTCHA verification successful, proceeding with sign-in."
-        );
-
-        const provider = new firebase.auth.GoogleAuthProvider();
-        const result = await firebase.auth().signInWithPopup(provider);
-        const user = result.user;
-
-        if (user) {
-          // Store display name and grade in Firestore or Realtime Database
-          // For simplicity, we'll store it in localStorage for now, but a backend solution is better.
-          localStorage.setItem("displayName", displayName);
-          localStorage.setItem("grade", grade);
-          updateLoginUI(user, displayName, grade);
-          closeLoginPopup();
-          sessionStorage.setItem("isLoggedIn", "true");
-          showToast(translate("loginSuccess"));
-        }
-      } catch (error) {
-        console.error(
-          "Error during reCAPTCHA execution or sign-in popup:",
-          error
-        );
-        let errorMessage = translate("loginError");
-        if (error.code === "auth/popup-closed-by-user") {
-          errorMessage = translate("loginCancelled");
-        } else if (
-          error.message === translate("recaptchaVerificationFailed") ||
-          error.message === translate("lowRecaptchaScore")
-        ) {
-          errorMessage = error.message; // Use the specific reCAPTCHA error
-        } else if (error.message === translate("recaptchaError")) {
-          errorMessage = error.message;
-        }
-        showToast(errorMessage, "error");
-      } finally {
-        // Hide loading state
-        btnText.style.display = "inline-block";
-        btnLoading.style.display = "none";
-        googleSignInButton.disabled = false;
-      }
-    });
   } catch (error) {
-    console.error("Error during sign-in process:", error);
-    showToast(translate("loginError"), "error");
-    // Hide loading state in case of early failure before grecaptcha.ready
+    console.error("Error during sign-in popup:", error);
+    let errorMessage = translate("loginError");
+    if (error.code === "auth/popup-closed-by-user") {
+      errorMessage = translate("loginCancelled");
+    }
+    showToast(errorMessage, "error");
+  } finally {
+    // Hide loading state
     btnText.style.display = "inline-block";
     btnLoading.style.display = "none";
     googleSignInButton.disabled = false;
