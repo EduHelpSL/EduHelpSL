@@ -1,40 +1,42 @@
-# Netlify configuration file for EduHelpSL backend migration
-# This configuration sets up Netlify Functions to handle API requests
-# while keeping the frontend hosted on Firebase
+# Netlify configuration file for EduHelpSL backend
+# This configuration sets up Netlify Functions to handle API requests.
 
 [build]
-  # Build settings (not needed since frontend stays on Firebase)
-  publish = "public"
-  command = "echo 'Frontend hosted on Firebase, backend on Netlify Functions'"
+  # 'publish' should point to your frontend's build output directory if Netlify were building it.
+  # Since Firebase hosts the frontend, this might be less critical here, but set it if you have one (e.g., 'public', 'dist').
+  publish = "public" # Adjust if your static site output is different or not applicable.
+  command = "echo 'Backend on Netlify Functions. Frontend on Firebase.'" # Example build command
 
 [functions]
-  # Directory containing Netlify Functions
+  # Directory containing Netlify Functions, relative to the project root.
   directory = "functions"
   
-  # Use esbuild for faster bundling
+  # Using esbuild for bundling Node.js functions is generally faster.
   node_bundler = "esbuild"
-  # included_files = ["functions/api.js"] # Temporarily removed for testing bundling
 
+# Optional: Plugin to automatically install function dependencies.
 [[plugins]]
   package = "@netlify/plugin-functions-install-core"
 
-# Redirect rules to route API calls to Netlify Functions
+# Redirect rules to route specific API calls to their respective Netlify Functions.
+# The frontend will call /api/health, Netlify rewrites this to execute the 'health' function.
 [[redirects]]
-  from = "/api/*"
-  to = "/.netlify/functions/api/:splat"
-  status = 200
-  # force = true # Removed to let Express handle routing and CORS, and allow preflight
+  from = "/api/health"
+  to = "/.netlify/functions/health"
+  status = 200 # Use 200 for function rewrites
 
-# Fallback for any other API routes
+# The frontend will call /api/keys, Netlify rewrites this to execute the 'getKeys' function.
 [[redirects]]
-  from = "/api"
-  to = "/.netlify/functions/api"
-  status = 200
+  from = "/api/keys"
+  to = "/.netlify/functions/getKeys"
+  status = 200 # Use 200 for function rewrites
 
-# Environment variables (configure these in Netlify dashboard)
-# GEMINI_API_KEY_1 = "your_gemini_key_1"
-# GEMINI_API_KEY_2 = "your_gemini_key_2"
-# GEMINI_API_KEY_3 = "your_gemini_key_3"
-# GDRIVE_API_KEY = "your_gdrive_api_key"
-# GDRIVE_FOLDER_ID = "your_gdrive_folder_id"
-# NODE_ENV = "production"
+# IMPORTANT: Any other /api/* routes that were previously handled by an 'api.js' router
+# would need their own specific redirects or be handled differently if that 'api.js' is removed.
+# The previous generic '/api/*' and '/api' redirects have been removed to avoid conflicts
+# with the specific routes above.
+
+# Environment variables (these should be configured in the Netlify UI dashboard for security):
+# Example:
+# GEMINI_API_KEY = "your_actual_gemini_api_key_from_netlify_env_vars"
+# GOOGLE_DRIVE_API_KEY = "your_actual_drive_api_key_from_netlify_env_vars"

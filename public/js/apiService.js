@@ -5,7 +5,7 @@
  * This ensures API keys are not exposed in the frontend code
  */
 
-const API_BASE_URL = "/api"; // Using relative path to leverage Netlify redirects
+const API_BASE_URL = "https://eduhelpsl.netlify.app/api"; // Using absolute path to Netlify backend
 
 /**
  * Cache for API keys to avoid multiple requests
