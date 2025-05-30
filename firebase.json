@@ -6,10 +6,6 @@
       {
         "source": "**",
         "destination": "/index.html"
-      },
-      {
-        "source": "/api/**",
-        "function": "backend"
       }
     ]
   },

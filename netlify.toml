@@ -13,9 +13,7 @@
   
   # Use esbuild for faster bundling
   node_bundler = "esbuild"
-  
-  # Include source maps for debugging
-  included_files = ["functions/api.js"]
+  # included_files = ["functions/api.js"] # Temporarily removed for testing bundling
 
 [[plugins]]
   package = "@netlify/plugin-functions-install-core"

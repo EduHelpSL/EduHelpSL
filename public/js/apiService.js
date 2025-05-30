@@ -5,7 +5,7 @@
  * This ensures API keys are not exposed in the frontend code
  */
 
-const API_BASE_URL = "https://eduhelpsl.netlify.app/.netlify/functions/api"; // TODO: Replace <YOUR_NETLIFY_SITE_NAME> with your actual Netlify site name or your custom domain pointing to the Netlify functions.
+const API_BASE_URL = "/api"; // Using relative path to leverage Netlify redirects
 
 /**
  * Cache for API keys to avoid multiple requests
