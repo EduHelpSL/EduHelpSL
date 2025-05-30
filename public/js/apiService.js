@@ -68,18 +68,17 @@ export async function getGeminiApiKey() {
   try {
     const keys = await fetchApiKeys();
 
-    // Try keys in order, with simple rotation
-    const geminiKeys = [
-      keys.gemini.key1,
-      keys.gemini.key2,
-      keys.gemini.key3,
-    ].filter(Boolean);
+    // Use geminiApiKey1 and geminiApiKey2 for rotation
+    const geminiKeys = [];
+    if (keys.geminiApiKey1) geminiKeys.push(keys.geminiApiKey1);
+    if (keys.geminiApiKey2) geminiKeys.push(keys.geminiApiKey2);
 
     if (geminiKeys.length === 0) {
-      throw new Error("No Gemini API keys available");
+      throw new Error("No Gemini API keys (1 or 2) available from backend");
     }
 
-    // Simple rotation based on current time
+    // Simple rotation based on current time (e.g., switch every minute)
+    // This will alternate between key 0 and key 1 if both are present
     const keyIndex = Math.floor(Date.now() / (60 * 1000)) % geminiKeys.length;
     return geminiKeys[keyIndex];
   } catch (error) {
@@ -96,13 +95,15 @@ export async function getGDriveConfig() {
   try {
     const keys = await fetchApiKeys();
 
-    if (!keys.gdrive.apiKey || !keys.gdrive.folderId) {
-      throw new Error("Google Drive API configuration incomplete");
+    if (!keys.googleDriveApiKey) { // Assuming folderId might also come from keys if backend sends it
+      throw new Error("Google Drive API key not found in response from backend");
     }
 
+    // GDRIVE_FOLDER_ID needs to be sent from the backend as well.
+    // For now, we only use googleDriveApiKey. If keys.googleDriveFolderId exists, use it.
     return {
-      apiKey: keys.gdrive.apiKey,
-      folderId: keys.gdrive.folderId,
+      apiKey: keys.googleDriveApiKey,
+      folderId: keys.googleDriveFolderId || null // Safely access folderId, defaults to null if not present
     };
   } catch (error) {
     console.error("Error getting Google Drive config:", error);

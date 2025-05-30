@@ -1,12 +1,15 @@
 exports.handler = async function(event, context) {
-  const geminiApiKey = process.env.GEMINI_API_KEY;
-  const googleDriveApiKey = process.env.GOOGLE_DRIVE_API_KEY; // Example, ensure this env var is set in Netlify
+  const geminiApiKey1 = process.env.GEMINI_API_KEY_1;
+  const geminiApiKey2 = process.env.GEMINI_API_KEY_2;
+  const geminiApiKey3 = process.env.GEMINI_API_KEY_3;
+  const googleDriveApiKey = process.env.GOOGLE_DRIVE_API_KEY;
+  const googleDriveFolderId = process.env.GDRIVE_FOLDER_ID;
 
-  if (!geminiApiKey) {
-    console.error('GEMINI_API_KEY environment variable is not set in Netlify build settings.');
+  if (!geminiApiKey1 || !geminiApiKey2) {
+    console.error('One or both GEMINI_API_KEY_1 or GEMINI_API_KEY_2 environment variables are not set in Netlify build settings.');
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: 'API key for Gemini is not configured on the server.' }),
+      body: JSON.stringify({ error: 'Required Gemini API keys are not configured on the server.' }),
       headers: {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*', // Consider restricting this in production
@@ -20,9 +23,11 @@ exports.handler = async function(event, context) {
     return {
       statusCode: 200,
       body: JSON.stringify({
-        geminiApiKey: geminiApiKey,
-        googleDriveApiKey: googleDriveApiKey
-        // Add other keys as needed
+        geminiApiKey1: geminiApiKey1,
+        geminiApiKey2: geminiApiKey2,
+        geminiApiKey3: geminiApiKey3,
+        googleDriveApiKey: googleDriveApiKey,
+        googleDriveFolderId: googleDriveFolderId
       }),
       headers: {
         'Content-Type': 'application/json',
