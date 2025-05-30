@@ -1,5 +1,7 @@
 // --- Library Functions ---
 
+import { initializeResourceFilter, filterAndRenderResources } from "./resourceFilter.js";
+
 import { dom } from "./domCache.js";
 import { state } from "./state.js";
 import { config } from "./config.js";
@@ -145,11 +147,28 @@ export function populateMainTypeFilter() {
  * Initializes the main library filters by populating grade, year, term, and type filters.
  */
 export function initializeMainLibraryFilters() {
-  populateMainGradeFilter();
-  populateMainYearFilter();
+  if (!dom.mainLibrarySection) return;
+
+  // populateMainGradeFilter(); // Now handled by initializeResourceFilter
+  // populateMainYearFilter(); // Now handled by initializeResourceFilter
   populateMainTermFilter();
   populateMainTypeFilter();
-  console.log("Main library filters initialized.");
+
+  // Initialize with resourceFilter.js system
+  // Ensure all these DOM elements are correctly cached in domCache.js and available
+  if (dom.libraryResourceList && dom.mainLibrarySearchInput && dom.mainLibraryGradeFilter && dom.mainLibraryYearFilter && dom.mainLibraryTermFilter && dom.mainLibraryTypeFilter) {
+    initializeResourceFilter(dom.libraryResourceList, { 
+      search: dom.mainLibrarySearchInput,
+      grade: dom.mainLibraryGradeFilter,
+      year: dom.mainLibraryYearFilter,
+      term: dom.mainLibraryTermFilter,
+      type: dom.mainLibraryTypeFilter,
+      // subject: dom.mainLibrarySubjectFilter, // Add if a subject filter exists for the main library search
+    });
+    console.log("Main library filters initialized with resourceFilter system.");
+  } else {
+    console.warn("Could not initialize main library filters with resourceFilter.js due to missing DOM elements. Ensure libraryResourceList, mainLibrarySearchInput, and all main library filters are in domCache.");
+  }
 }
 
 /**
@@ -632,28 +651,32 @@ export function setupLibraryEventListeners() {
 
       // --- Handle Main Search Button Click --- //
       if (target === dom.mainLibrarySearchBtn) {
-        console.log("Main Library Search Button clicked");
-        ls.mainSearchTerm = dom.mainLibrarySearchInput?.value || "";
-        ls.mainSelectedGradeFilter = dom.mainLibraryGradeFilter?.value || "all";
-        ls.mainSelectedYearFilter = dom.mainLibraryYearFilter?.value || "all";
-        ls.mainSelectedTermFilter = dom.mainLibraryTermFilter?.value || "all";
-        ls.mainSelectedTypeFilter = dom.mainLibraryTypeFilter?.value || "all";
+        console.log("Main Library Search Button clicked - now uses resourceFilter.js");
+        // Filter values are now managed by resourceFilter.js's currentFilters
+        // ls.mainSearchTerm = dom.mainLibrarySearchInput?.value || ""; // Removed
+        // ls.mainSelectedGradeFilter = dom.mainLibraryGradeFilter?.value || "all"; // Removed
+        // ls.mainSelectedYearFilter = dom.mainLibraryYearFilter?.value || "all"; // Removed
+        // ls.mainSelectedTermFilter = dom.mainLibraryTermFilter?.value || "all"; // Removed
+        // ls.mainSelectedTypeFilter = dom.mainLibraryTypeFilter?.value || "all"; // Removed
+        
+        const ls = state.libraryState; // Ensure ls is defined (it's defined in the outer scope of this event listener)
         ls.isMainSearchActive = true;
 
         // Clear standard nav state as main search overrides it
         ls.selectedGrade = null;
         ls.selectedResourceType = null;
         ls.selectedSubject = null;
-        ls.currentSearch = "";
-        ls.selectedYearFilter = "all";
+        ls.currentSearch = ""; // This refers to standard nav search
+        ls.selectedYearFilter = "all"; // This refers to standard nav filter
 
-        // Render results and switch view
-        renderResourceList();
+        // Render results using resourceFilter.js and switch view
+        filterAndRenderResources(); // Imported from resourceFilter.js
         switchActiveView(dom.libraryPage, "libraryListView");
+        
         // Set back button target for main search results
-        if (dom.libraryListBackButton)
-          dom.libraryListBackButton.dataset.targetView =
-            "libraryGradeSelectionView";
+        if (dom.libraryListBackButton) {
+          dom.libraryListBackButton.dataset.targetView = "libraryGradeSelectionView";
+        }
         return; // Prevent other handlers from firing
       }
 
@@ -833,123 +856,11 @@ export function setupLibraryEventListeners() {
    * Updates the main library filter values in the application state.
    * This function does not trigger a search; it only stores the current selections.
    */
-  function updateMainLibraryFilterSelectionsInState() {
-    const ls = state.libraryState;
-    if (
-      !dom.mainLibrarySearchInput ||
-      !dom.mainLibraryGradeFilter ||
-      !dom.mainLibraryYearFilter ||
-      !dom.mainLibraryTermFilter ||
-      !dom.mainLibraryTypeFilter
-    ) {
-      console.warn(
-        "Main library search/filter elements not fully available for updateMainLibraryFilterSelectionsInState."
-      );
-      return;
-    }
-
-    ls.mainSearchTerm = dom.mainLibrarySearchInput.value.trim();
-    ls.mainSelectedGradeFilter = dom.mainLibraryGradeFilter.value;
-    ls.mainSelectedYearFilter = dom.mainLibraryYearFilter.value;
-    ls.mainSelectedTermFilter = dom.mainLibraryTermFilter.value;
-    ls.mainSelectedTypeFilter = dom.mainLibraryTypeFilter.value;
-    console.log(
-      "Main library filter state updated (no search):",
-      JSON.parse(JSON.stringify(ls))
-    );
-  }
-
-  if (
-    dom.mainLibrarySearchInput &&
-    dom.mainLibrarySearchBtn &&
-    dom.mainLibraryGradeFilter &&
-    dom.mainLibraryYearFilter &&
-    dom.mainLibraryTermFilter &&
-    dom.mainLibraryTypeFilter
-  ) {
-    const debouncedStateUpdater = debounce(
-      updateMainLibraryFilterSelectionsInState,
-      300
-    );
-    dom.mainLibrarySearchInput.addEventListener("input", debouncedStateUpdater); // Update state on input
-
-    // Search button remains the primary trigger for actual search
-    dom.mainLibrarySearchBtn.addEventListener(
-      "click",
-      handleMainLibrarySearchAndFilter // This function will read from DOM/state and then search
-    );
-
-    // Filters now trigger a search directly
-    dom.mainLibraryGradeFilter.addEventListener(
-      "change",
-      handleMainLibrarySearchAndFilter
-    );
-    dom.mainLibraryYearFilter.addEventListener(
-      "change",
-      handleMainLibrarySearchAndFilter
-    );
-    dom.mainLibraryTermFilter.addEventListener(
-      "change",
-      handleMainLibrarySearchAndFilter
-    );
-    dom.mainLibraryTypeFilter.addEventListener(
-      "change",
-      handleMainLibrarySearchAndFilter
-    );
-
-    // Perform an initial search/filter if there are default values or to show all initially
-    // handleMainLibrarySearchAndFilter(); // This might be too aggressive on page load, consider if needed
-  } else {
-    console.warn(
-      "One or more main library search/filter elements are missing from DOM cache."
-    );
-  }
-}
-
-/**
- * Handles the main library search and filter logic.
- * This function is triggered by input changes or button clicks on the main library search controls.
- */
-function handleMainLibrarySearchAndFilter() {
-  const ls = state.libraryState;
-  if (
-    !dom.mainLibrarySearchInput ||
-    !dom.mainLibraryGradeFilter ||
-    !dom.mainLibraryYearFilter ||
-    !dom.mainLibraryTermFilter ||
-    !dom.mainLibraryTypeFilter
-  ) {
-    console.warn(
-      "Main library search/filter elements not fully available for handleMainLibrarySearchAndFilter."
-    );
-    return;
-  }
-
-  console.log("handleMainLibrarySearchAndFilter triggered");
-
-  ls.mainSearchTerm = dom.mainLibrarySearchInput.value.trim();
-  ls.mainSelectedGradeFilter = dom.mainLibraryGradeFilter.value;
-  ls.mainSelectedYearFilter = dom.mainLibraryYearFilter.value;
-  ls.mainSelectedTermFilter = dom.mainLibraryTermFilter.value;
-  ls.mainSelectedTypeFilter = dom.mainLibraryTypeFilter.value;
-  ls.isMainSearchActive = true;
-
-  // Clear standard navigation state as main search overrides it
-  ls.selectedGrade = null;
-  ls.selectedResourceType = null;
-  ls.selectedSubject = null;
-  ls.currentSearch = "";
-  ls.selectedYearFilter = "all";
-
-  // Render results and switch view
-  renderResourceList(); // This function should now use the main search state
-  switchActiveView(dom.libraryPage, "libraryListView");
-
-  // Set back button target for main search results
-  if (dom.libraryListBackButton) {
-    dom.libraryListBackButton.dataset.targetView = "libraryGradeSelectionView";
-  }
-  console.log("Main search state updated:", JSON.parse(JSON.stringify(ls)));
+  // The updateMainLibraryFilterSelectionsInState function and the first definition of
+  // handleMainLibrarySearchAndFilter have been removed as they are no longer used.
+  // Main library filter event listeners are now handled by initializeResourceFilter (from resourceFilter.js)
+  // and the main search button click directly calls filterAndRenderResources (from resourceFilter.js).
+// The handleMainLibrarySearchAndFilter function has been removed as it is no longer used.
 }
 
 // --- Utility and Helper Functions for Library --- //

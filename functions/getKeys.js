@@ -12,9 +12,9 @@ exports.handler = async function(event, context) {
       body: JSON.stringify({ error: 'Required Gemini API keys are not configured on the server.' }),
       headers: {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*', // Consider restricting this in production
-        'Access-Control-Allow-Headers': 'Content-Type',
-        'Access-Control-Allow-Methods': 'GET, OPTIONS'
+        'Access-Control-Allow-Origin': '*', // For production, consider specific origins like 'http://localhost:5000', 'https://your-firebase-app-id.web.app'
+        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, DELETE',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization, User-Agent, X-Requested-With'
       }
     };
   }
@@ -31,9 +31,9 @@ exports.handler = async function(event, context) {
       }),
       headers: {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*', // Consider restricting this in production
-        'Access-Control-Allow-Headers': 'Content-Type',
-        'Access-Control-Allow-Methods': 'GET, OPTIONS'
+        'Access-Control-Allow-Origin': '*', // For production, consider specific origins like 'http://localhost:5000', 'https://your-firebase-app-id.web.app'
+        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, DELETE',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization, User-Agent, X-Requested-With'
       }
     };
   } catch (error) {
@@ -43,9 +43,9 @@ exports.handler = async function(event, context) {
       body: JSON.stringify({ error: 'Failed to retrieve API keys.', details: error.message }),
       headers: {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': 'Content-Type',
-        'Access-Control-Allow-Methods': 'GET, OPTIONS'
+        'Access-Control-Allow-Origin': '*', // For production, consider specific origins like 'http://localhost:5000', 'https://your-firebase-app-id.web.app'
+        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, DELETE',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization, User-Agent, X-Requested-With'
       }
     };
   }

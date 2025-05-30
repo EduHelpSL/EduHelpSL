@@ -234,12 +234,23 @@
 }
 
 .testimonial-text::before {
-    content: '\201C';
+    content: '\201C'; /* Opening curly quote */
     font-size: 3rem;
     color: var(--accent-color-medium);
     position: absolute;
     top: -0.5em;
-    left: -0.2em;
+    left: -0.35em;
+    opacity: 0.7;
+}
+
+.testimonial-text::after {
+    content: '\201D'; /* Closing curly quote */
+    font-size: 3rem;
+    color: var(--accent-color-medium);
+    position: absolute;
+    /* Adjust right and bottom as needed, these are starting points */
+    right: -0.1em; 
+    bottom: -0.9em; /* May need fine-tuning depending on line-height and text length */
     opacity: 0.7;
 }
 
@@ -252,14 +263,63 @@
 }
 
 .testimonial-author::before {
-    content: ' ';
+    content: '— ';
 }
 
+.screenshots-section {
+    background: var(--gradient-spring-warmth);
+}
 /* Screenshots Section */
 .screenshots-carousel img:hover {
     transform: scale(1.08) rotate(1deg);
     opacity: 1;
     box-shadow: var(--shadow-xl);
+}
+
+
+/* Screenshots Section - Enhanced Styles */
+.screenshots-carousel {
+  display: flex;
+  flex-wrap: wrap; /* Allow images to wrap on smaller screens */
+  justify-content: center; /* Center images in the container */
+  gap: var(--gap-lg, 20px); /* Spacing between images */
+  padding: var(--gap-md, 15px) 0; /* Padding above/below the carousel */
+  margin-bottom: var(--gap-xl, 30px); /* Space below the carousel section */
+}
+
+.screenshots-carousel img {
+  width: 100%; /* Make images responsive within their flex items */
+  max-width: 800px; /* Max width for each image, adjust as needed */
+  height: auto; /* Maintain aspect ratio */
+  border-radius: var(--radius-lg, 12px); /* Softer rounded corners */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Softer, more diffused shadow */
+  border: 1px solid var(--border-color, #ddd); /* Light border */
+  object-fit: cover; /* Ensures images cover the area, might crop */
+  opacity: 0.95; /* Slightly less transparent initially */
+  transition: transform 0.25s ease-out, opacity 0.25s ease-out; /* Faster, smoother, no box-shadow anim */
+  will-change: transform, opacity; /* Hint for browser optimization */
+}
+
+/* Existing hover effect will be complemented by the transition */
+.screenshots-carousel img:hover {
+  transform: scale(1.03); /* Slightly smaller, quicker scale */
+  opacity: 1;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); /* More pronounced, but still soft shadow */
+}
+
+/* Media query for smaller screens to adjust layout if needed */
+@media (max-width: 768px) {
+  .screenshots-carousel {
+    flex-direction: column; /* Stack images vertically */
+    align-items: center; /* Center images when stacked */
+  }
+  .screenshots-carousel img {
+    max-width: 90%; /* Allow images to take more width on small screens */
+    margin-bottom: var(--gap-lg, 20px); /* Add space below each image when stacked */
+  }
+  .screenshots-carousel img:last-child {
+    margin-bottom: 0;
+  }
 }
 
 /* About Section */

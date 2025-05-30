@@ -21,6 +21,31 @@ let genAI = null; // Placeholder
 let geminiModelInstance = null; // Placeholder
 let isGeminiActive = false; // Placeholder
 
+// Function to update the visual chat online status indicator
+export function updateChatOnlineStatus(isOnline) {
+  if (dom.chatStatusDot) {
+    dom.chatStatusDot.classList.toggle("online", isOnline);
+    dom.chatStatusDot.classList.toggle("offline", !isOnline);
+  }
+  if (dom.chatStatusText) {
+    dom.chatStatusText.textContent = isOnline 
+      ? getTranslation("chatStatusOnline", "Online") 
+      : getTranslation("chatStatusOffline", "Offline");
+    dom.chatStatusText.classList.toggle("online", isOnline);
+    dom.chatStatusText.classList.toggle("offline", !isOnline);
+  }
+  // Also update the general Gemini active state and UI elements
+  isGeminiActive = isOnline;
+  if (dom.chatInput) dom.chatInput.disabled = !isGeminiActive;
+  if (dom.sendBtn) dom.sendBtn.disabled = !isGeminiActive;
+  if (dom.chatInput) {
+    dom.chatInput.placeholder = isGeminiActive
+      ? getTranslation("chatPlaceholder", "Ask a question...")
+      : getTranslation("chatDisabled", "Chat unavailable");
+  }
+  console.log(`Chat status updated to: ${isOnline ? 'Online' : 'Offline'}`);
+}
+
 // Function to set the Gemini instance from the main initialization
 export function setGeminiInstances(genAIInstance, modelInstance, activeStatus) {
   genAI = genAIInstance;
@@ -30,10 +55,8 @@ export function setGeminiInstances(genAIInstance, modelInstance, activeStatus) {
   // Update UI based on initial Gemini state
   if (dom.chatInput) dom.chatInput.disabled = !isGeminiActive;
   if (dom.sendBtn) dom.sendBtn.disabled = !isGeminiActive;
-  if (dom.chatInput)
-    dom.chatInput.placeholder = isGeminiActive
-      ? state.translations["chatPlaceholder"] || "Ask a question..."
-      : state.translations["chatDisabled"] || "Chat unavailable";
+  // Call the new function to update the visual status and dependent UI
+  updateChatOnlineStatus(activeStatus);
 }
 
 // Define system prompt dynamically - Updated for file input
@@ -348,7 +371,9 @@ export async function getGeminiResponse(messageParts, botMessageElement) {
     while (state.chatState.messageHistory.length > maxHistoryItems) {
       state.chatState.messageHistory.shift();
     }
+    updateChatOnlineStatus(true); // AI responded successfully
   } catch (error) {
+    updateChatOnlineStatus(false); // AI failed to respond or error during processing
     console.error("Gemini API error:", error);
 
     // Display an error message in the bot's bubble

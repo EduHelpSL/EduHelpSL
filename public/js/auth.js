@@ -165,7 +165,6 @@ function createOrUpdateUserProfile(user) {
           <strong>${user.displayName || "User"}</strong>
           <small>${user.email}</small>
         </div>
-        <hr>
         <button class="profile-dropdown-item" id="logoutBtn">
           <i class="fas fa-sign-out-alt"></i>
           <span data-lang-key="authLogout">Logout</span>
@@ -713,8 +712,7 @@ async function handleSignIn(event) {
       localStorage.setItem("grade", grade);
       updateLoginUI(user, displayName, grade);
       closeLoginPopup();
-      sessionStorage.setItem("isLoggedIn", "true");
-      showToast(translate("loginSuccess"));
+      sessionStorage.setItem("justLoggedIn", "true"); // Set flag for specific welcome message and redirect
     }
   } catch (error) {
     console.error("Error during sign-in popup:", error);

@@ -18,17 +18,18 @@
     />
     <link rel="stylesheet" href="css\reset.css" />
     <link rel="stylesheet" href="css\variables.css" />
-    <link rel="stylesheet" href="css/style.css" />
-    <link rel="stylesheet" href="css/loading.css" />
+    <link rel="stylesheet" href="css\style.css" />
+    <link rel="stylesheet" href="css\loading.css" />
     <link rel="stylesheet" href="css\base.css" />
     <link rel="stylesheet" href="css\layout.css" />
+    <link rel="stylesheet" href="css\components.css" />
     <link rel="stylesheet" href="css\navigation.css" />
     <link rel="stylesheet" href="css\home.css" />
     <link rel="stylesheet" href="css\library.css" />
     <link rel="stylesheet" href="css\videos.css" />
     <link rel="stylesheet" href="css\chat.css" />
     <link rel="stylesheet" href="css\scroll.css" />
-    <link rel="icon" href="assets/media/logo.png" type="image/png" />
+    <link rel="icon" href="assets\media\logo.png" type="image/png" />
   </head>
   <body class="content-loading">
     <!-- New Loading Indicator -->
@@ -51,7 +52,7 @@
           aria-label="Go to Home page"
         >
           <img
-            src="assets/media/logo.png"
+            src="assets\media\logo.png"
             alt="EduHelp SL Logo"
             class="logo"
             data-lang-key="logoAlt"
@@ -286,7 +287,7 @@
           <p class="section-intro-text" data-lang-key="screenshotsDesc"></p>
           <div class="screenshots-carousel">
             <img
-              src=""
+              src="assets/media/eduhelpslDashboard.png"  <!-- Ensure this path is correct -->
               data-lang-key="screenshotDashboardAlt"
               alt="EduHelp SL Dashboard Preview"
               loading="lazy"
@@ -298,7 +299,7 @@
               loading="lazy"
             />
             <img
-              src=""
+              src="assets\media\aichatimg.png"
               data-lang-key="screenshotChatAlt"
               alt="EduHelp SL AI Tutor Preview"
               loading="lazy"
@@ -398,9 +399,20 @@
                   >Grade:</label
                 >
                 <select id="mainLibraryGradeFilter" class="filter-select">
-                  <option value="all" data-lang-key="filterGradeAll">
-                    All Grades
-                  </option>
+                  <option value="all" data-lang-key="filterGradeAll">All Grades</option>
+                  <option value="1">Grade 1</option>
+                  <option value="2">Grade 2</option>
+                  <option value="3">Grade 3</option>
+                  <option value="4">Grade 4</option>
+                  <option value="5">Grade 5</option>
+                  <option value="6">Grade 6</option>
+                  <option value="7">Grade 7</option>
+                  <option value="8">Grade 8</option>
+                  <option value="9">Grade 9</option>
+                  <option value="10">Grade 10</option>
+                  <option value="11">Grade 11</option>
+                  <option value="12">Grade 12</option>
+                  <option value="13">Grade 13</option>
                 </select>
               </div>
               <div class="filter-container">
@@ -411,9 +423,17 @@
                   >Year:</label
                 >
                 <select id="mainLibraryYearFilter" class="filter-select">
-                  <option value="all" data-lang-key="filterYearAll">
-                    All Years
-                  </option>
+                  <option value="all" data-lang-key="filterYearAll">All Years</option>
+                  <option value="2025">2025</option>
+                  <option value="2024">2024</option>
+                  <option value="2023">2023</option>
+                  <option value="2022">2022</option>
+                  <option value="2021">2021</option>
+                  <option value="2020">2020</option>
+                  <option value="2019">2019</option>
+                  <option value="2018">2018</option>
+                  <option value="2017">2017</option>
+                  <option value="2016">2016</option>
                 </select>
               </div>
               <div class="filter-container">
@@ -676,7 +696,7 @@
                 type="file"
                 id="chatFileInput"
                 style="display: none"
-                accept=".txt,.pdf,.docx,.md"
+                accept=".txt,.pdf,.docx,.md,.png,.jpg,.jpeg,.webp,.svg"
               />
             </div>
           </div>

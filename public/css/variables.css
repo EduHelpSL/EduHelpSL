@@ -40,6 +40,7 @@
   --bg-color: hsl(var(--neutral-hue), var(--neutral-saturation), 98%);
   --surface-color-alt: hsl(var(--neutral-hue), var(--neutral-saturation), 97%);
   --border-color: hsl(var(--neutral-hue), var(--neutral-saturation), 92%);
+  --primary-text-color: hsl(var(--neutral-hue), 10%, 10%); /* Main text color for primary content */
   --text-primary: hsl(var(--neutral-hue), 10%, 15%);
   --text-secondary: hsl(var(--neutral-hue), 8%, 35%);
   --text-tertiary: hsl(var(--neutral-hue), 7%, 50%);
@@ -114,6 +115,7 @@
   --gradient-premium-dark: linear-gradient(to right, #757575 0%, #bdbdbd 100%);
   --gradient-midnight-city: linear-gradient(to top, #7abefa 0%, #155db4 100%);
   --gradient-crystal-clear: linear-gradient(to top, #80deea 0%, #b2ebf2 100%);
+  --gradient-orange-coral: linear-gradient(135deg, #ffd9a1 0%, #ffbba3 100%); /* Orange to Coral */
 
   /* --- Semantic Colors --- */
   --primary-color: var(--accent-color);

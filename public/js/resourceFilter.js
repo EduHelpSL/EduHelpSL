@@ -39,7 +39,7 @@ export function initializeResourceFilter(container, filters) {
       "input",
       debounce((e) => {
         currentFilters.searchQuery = e.target.value.toLowerCase();
-        filterAndRenderResources();
+        // filterAndRenderResources(); // Removed: Will be triggered by search button
       }, 300)
     );
   }
@@ -48,7 +48,7 @@ export function initializeResourceFilter(container, filters) {
     if (filterElements[filterKey]) {
       filterElements[filterKey].addEventListener("change", (e) => {
         currentFilters[filterKey] = e.target.value;
-        filterAndRenderResources();
+        // filterAndRenderResources(); // Removed: Will be triggered by search button
       });
     }
   });
@@ -68,7 +68,7 @@ export function initializeResourceFilter(container, filters) {
 /**
  * Filters resources based on current filter criteria and re-renders the list.
  */
-function filterAndRenderResources() {
+export function filterAndRenderResources() {
   if (!resourceContainerElement) {
     console.warn("filterAndRenderResources: resourceContainerElement not set.");
     return;
@@ -269,22 +269,32 @@ export function populateFilters(resources, filters) {
 
   const getLang = (key, fallback) => getTranslation(key) || fallback;
 
+  // Initialize sets for dynamic filters (subjects, types, terms)
   const uniqueValues = {
-    grades: new Set(),
     subjects: new Set(),
     types: new Set(),
-    years: new Set(),
     terms: new Set(),
   };
 
+  // Populate dynamic filters from resource data
   resources.forEach((resource) => {
-    if (resource.grade) uniqueValues.grades.add(resource.grade);
     if (resource.subject) uniqueValues.subjects.add(resource.subject);
     if (resource.type) uniqueValues.types.add(resource.type);
-    if (resource.year) uniqueValues.years.add(String(resource.year)); // Ensure year is string
     if (resource.term && resource.term !== "N/A")
       uniqueValues.terms.add(resource.term);
   });
+
+  // Hardcode grade options 1-13
+  const gradesSet = new Set();
+  for (let i = 1; i <= 13; i++) {
+    gradesSet.add(String(i));
+  }
+
+  // Hardcode year options 2016-2025
+  const yearsSet = new Set();
+  for (let i = 2016; i <= 2025; i++) {
+    yearsSet.add(String(i));
+  }
 
   const populateSelect = (
     selectElement,
@@ -302,10 +312,13 @@ export function populateFilters(resources, filters) {
     selectElement.appendChild(allOption);
 
     let sortedValues = Array.from(valuesSet);
+    // Sort years descending, grades numerically ascending, others alphabetically.
     if (selectElement === filters.year) {
-      sortedValues.sort((a, b) => String(b).localeCompare(String(a))); // Sort years descending
+      sortedValues.sort((a, b) => String(b).localeCompare(String(a)));
+    } else if (selectElement === filters.grade) {
+      sortedValues.sort((a, b) => parseInt(a, 10) - parseInt(b, 10));
     } else {
-      sortedValues.sort((a, b) => a.localeCompare(b)); // Alphabetical sort for others
+      sortedValues.sort((a, b) => a.localeCompare(b));
     }
 
     sortedValues.forEach((value) => {
@@ -314,20 +327,19 @@ export function populateFilters(resources, filters) {
       let displayValue = value;
       // Attempt to translate specific subject/type/term values
       if (labelPrefixKey) {
-        // For subjects, types
         const translationKey = `${labelPrefixKey}${
           value.charAt(0).toUpperCase() + value.slice(1).replace(/\s+/g, "")
         }`;
         displayValue = getLang(translationKey, value);
       } else if (selectElement === filters.term && value !== "N/A") {
-        // For terms
-        displayValue = getLang(value.replace(/\s+/g, "").toLowerCase(), value); // e.g. term1, term2
+        displayValue = getLang(value.replace(/\s+/g, "").toLowerCase(), value);
       }
-      // Grades are assumed to be display-ready (e.g., "Grade 1")
+      // Grades and Years are displayed as their direct values (e.g., "1", "2024")
 
       option.textContent = displayValue;
       selectElement.appendChild(option);
     });
+
     // Restore previous selection if it's still valid
     if (
       Array.from(selectElement.options).some(
@@ -338,18 +350,18 @@ export function populateFilters(resources, filters) {
     }
   };
 
-  populateSelect(filters.grade, uniqueValues.grades, "filterGradeAll");
+  // populateSelect(filters.grade, gradesSet, "filterGradeAll"); // Now hardcoded in HTML
   populateSelect(
     filters.subject,
     uniqueValues.subjects,
     "filterSubjectAll",
     "subject"
   );
-  populateSelect(filters.type, uniqueValues.types, "filterTypeAll", "resource"); // 'resource' prefix for types like 'resourceBooks'
-  populateSelect(filters.year, uniqueValues.years, "filterYearAll");
+  populateSelect(filters.type, uniqueValues.types, "filterTypeAll", "resource");
+  // populateSelect(filters.year, yearsSet, "filterYearAll"); // Now hardcoded in HTML
   populateSelect(filters.term, uniqueValues.terms, "filterTermAll");
 
-  console.log("Filters populated.");
+  console.log("Dynamic filters (Subject, Type, Term) populated. Grade/Year are hardcoded in HTML.");
 }
 
 // No longer exporting via window.EduHelp; using ES module exports at the top of functions.

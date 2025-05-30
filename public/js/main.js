@@ -12,6 +12,7 @@ import { navigateToPage, updateCopyrightYear } from "./navigation.js";
 import {
   addChatWelcomeMessage,
   setGeminiInstances as setChatGeminiInstances,
+  updateChatOnlineStatus,
 } from "./chat.js";
 import { autoGrowTextarea, showError } from "./utils.js";
 import { initializeAuth, showAuthError, showAuthMessage } from "./auth.js";
@@ -56,6 +57,8 @@ async function initializeEduHelpApp() {
         "Backend server unavailable. Some features may be limited.",
         false
       );
+      // If backend is not healthy, explicitly set chat to offline
+      updateChatOnlineStatus(false);
     }
   } catch (error) {
     console.warn("Could not check backend health:", error);

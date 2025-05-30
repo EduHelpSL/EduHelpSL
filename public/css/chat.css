@@ -1,8 +1,8 @@
 .chat-container {
-    width: 90%;
-    max-width: 800px;
-    height: 75vh;
-    max-height: 700px;
+    width: 90%; /* Consider adjusting if 1000px is too wide for 90% on some screens */
+    max-width: 900px; /* Increased from 800px */
+    height: 80vh; /* Increased from 75vh */
+    max-height: 900px; /* Increased from 700px */
     margin: 2rem auto;
     display: flex;
     flex-direction: column;
@@ -111,8 +111,8 @@
 }
 
 .message {
-    max-width: 75%;
-    padding: 0.9rem 1.3rem;
+    max-width: 80%; /* Increased from 75% */
+    padding: 1rem 1.5rem; /* Increased padding */
     border-radius: var(--radius-md);
     position: relative;
     line-height: 1.6;
@@ -122,6 +122,7 @@
     animation: messageEnter 0.35s cubic-bezier(0.25, 0.1, 0.25, 1) forwards 0.1s;
     box-shadow: var(--shadow-sm);
     transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    font-size: 1.05rem; /* Added for better readability */
 }
 
 @keyframes messageEnter {
@@ -354,18 +355,18 @@
 
 .chat-input {
     flex: 1;
-    padding: 0.9rem 1.1rem;
+    padding: 1rem 1.2rem; /* Increased padding */
     border: 1px solid var(--input-border);
     border-radius: var(--radius-md);
     resize: none;
     transition: var(--transition-std);
-    font-size: 1rem;
+    font-size: 1.05rem; /* Increased font size */
     line-height: 1.5;
     background: var(--input-bg);
     color: var(--text-primary);
     overflow-y: hidden;
-    min-height: 44px;
-    max-height: 160px;
+    min-height: 48px; /* Increased min-height */
+    max-height: 160px; /* Max height can remain or be adjusted if needed */
 }
 
 .chat-input:focus {
