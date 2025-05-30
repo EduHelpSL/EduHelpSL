@@ -32,7 +32,6 @@
     <link rel="icon" href="assets\media\logo.png" type="image/png" />
   </head>
   <body class="content-loading">
-    <!-- New Loading Indicator -->
     <div id="global-loader" class="loading-indicator">
       <div class="dots-spinner">
         <div class="bounce1"></div>
@@ -287,11 +286,13 @@
           <p class="section-intro-text" data-lang-key="screenshotsDesc"></p>
           <div class="screenshots-carousel">
             <img
-              src="assets/media/eduhelpslDashboard.png"  <!-- Ensure this path is correct -->
-              data-lang-key="screenshotDashboardAlt"
-              alt="EduHelp SL Dashboard Preview"
-              loading="lazy"
-            />
+              class="dashboard-preview-img"
+              src="./assets/images/screenshots/dashboard-light.webp"
+              data-src-light="./assets/images/screenshots/dashboard-light.webp"
+              data-src-dark="./assets/images/screenshots/dashboard-dark.webp"
+              alt="EduHelp SL Dashboard Preview" 
+              data-lang-key="screenshotDashboardAlt" 
+              loading="lazy" />
             <img
               src="assets\media\eduhelpsllibrary.png"
               data-lang-key="screenshotLibraryAlt"
