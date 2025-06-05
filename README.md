@@ -1,6 +1,6 @@
-# EduHelp Sri Lanka
+# LEARNFUN SL
 
-EduHelp Sri Lanka is an educational web application designed to provide students in Sri Lanka with easy access to past papers, textbooks, educational videos, and a custom AI chatbot tutor for assistance. The application aims to support learning by offering resources in both English and Tamil. This app is built using HTML, CSS, and JavaScript, making it lightweight and simple to use.
+LearnFun SL is an educational web application designed to provide students in Sri Lanka with easy access to past papers, textbooks, educational videos, and a custom AI chatbot tutor for assistance. The application aims to support learning by offering resources in both English and Tamil. This app is built using HTML, CSS, and JavaScript, making it lightweight and simple to use.
 
 ## Features
 
